@@ -1,5 +1,5 @@
-
 import re
+import spacy
 
 def extract_text(filepath):
     if filepath.endswith('.pdf'):
@@ -69,3 +69,97 @@ def clean_text(text):
             seen.add(l_norm)
     cleaned_text = '\n'.join(cleaned_lines)
     return cleaned_text
+
+def extract_fields_from_sections(sections):
+    nlp = spacy.load('fr_core_news_sm')
+    dossier = {
+        'informations_personnelles': {},
+        'competences': [],
+        'experience_professionnelle': [],
+        'formation': [],
+        'certifications': [],
+        'langues': [],
+        'projets': [],
+        'methodologies': []
+    }
+    # --- Informations personnelles ---
+    perso = sections.get('informations_personnelles', '')
+    # Nom (première entité PERSON trouvée)
+    doc = nlp(perso)
+    for ent in doc.ents:
+        if ent.label_ == 'PER':
+            dossier['informations_personnelles']['nom'] = ent.text
+            break
+    # Email
+    email = re.search(r'[\w\.-]+@[\w\.-]+', perso)
+    if email:
+        dossier['informations_personnelles']['email'] = email.group()
+    # Téléphone
+    tel = re.search(r'(\+\d{1,3}[-.\s]?)?(\d{2,3}[-.\s]?){3,5}\d{2,4}', perso)
+    if tel:
+        dossier['informations_personnelles']['telephone'] = tel.group()
+    # Adresse (simple heuristique)
+    adresse = re.search(r'(\d{1,4} ?[a-zA-ZéèàêâîôûçÉÈÀÊÂÎÔÛÇ,\.\- ]+)', perso)
+    if adresse:
+        dossier['informations_personnelles']['adresse'] = adresse.group()
+    # --- Compétences ---
+    comp = sections.get('competences', '')
+    if comp:
+        dossier['competences'] = [c.strip('-• ') for c in comp.split('\n') if c.strip()]
+    # --- Expérience professionnelle ---
+    exp = sections.get('experience_professionnelle', '')
+    if exp:
+        exp_blocks = re.split(r'\n{2,}', exp)
+        for block in exp_blocks:
+            doc = nlp(block)
+            poste = entreprise = dates = resp = ''
+            for ent in doc.ents:
+                if ent.label_ == 'ORG':
+                    entreprise = ent.text
+                elif ent.label_ == 'PER':
+                    poste = ent.text
+                elif ent.label_ == 'DATE':
+                    dates = ent.text
+            resp = block
+            dossier['experience_professionnelle'].append({
+                'poste': poste,
+                'entreprise': entreprise,
+                'dates': dates,
+                'responsabilites': resp
+            })
+    # --- Formation ---
+    form = sections.get('formation', '')
+    if form:
+        form_blocks = re.split(r'\n{2,}', form)
+        for block in form_blocks:
+            doc = nlp(block)
+            diplome = etab = dates = ''
+            for ent in doc.ents:
+                if ent.label_ == 'ORG':
+                    etab = ent.text
+                elif ent.label_ == 'DATE':
+                    dates = ent.text
+                elif ent.label_ == 'MISC':
+                    diplome = ent.text
+            dossier['formation'].append({
+                'diplome': diplome,
+                'etablissement': etab,
+                'dates': dates
+            })
+    # --- Certifications ---
+    cert = sections.get('certifications', '')
+    if cert:
+        dossier['certifications'] = [c.strip('-• ') for c in cert.split('\n') if c.strip()]
+    # --- Langues ---
+    langues = sections.get('langues', '')
+    if langues:
+        dossier['langues'] = [l.strip('-• ') for l in langues.split('\n') if l.strip()]
+    # --- Projets ---
+    projets = sections.get('projets', '')
+    if projets:
+        dossier['projets'] = [p.strip('-• ') for p in projets.split('\n') if p.strip()]
+    # --- Méthodologies ---
+    meth = sections.get('methodologies', '')
+    if meth:
+        dossier['methodologies'] = [m.strip('-• ') for m in meth.split('\n') if m.strip()]
+    return dossier

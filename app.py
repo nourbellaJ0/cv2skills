@@ -1,9 +1,8 @@
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 from utils.file_detector import detect_format
-from utils.extractor import extract_text, clean_text, extract_sections
+from utils.extractor import extract_text, clean_text, extract_sections, extract_fields_from_sections
 
 app = Flask(__name__)
 CORS(app)
@@ -34,13 +33,14 @@ def upload():
 
         cleaned_text = clean_text(raw_text)
         classified_data = extract_sections(cleaned_text)
+        dossier_competences = extract_fields_from_sections(classified_data)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
     return jsonify({
         "format": file_type,
-        "sections": classified_data
+        "dossier_competences": dossier_competences
     })
 
 if __name__ == "__main__":
