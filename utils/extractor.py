@@ -1,3 +1,6 @@
+
+import re
+
 def extract_text(filepath):
     if filepath.endswith('.pdf'):
         import PyPDF2
@@ -14,11 +17,6 @@ def extract_text(filepath):
         return "Format non supporté"
 
 def extract_sections(text):
-    """
-    Identifie et catégorise les sections clés d'un CV à partir du texte brut.
-    Retourne un dictionnaire avec les sections détectées.
-    """
-    import re
     sections = {
         'informations_personnelles': '',
         'competences': '',
@@ -29,7 +27,6 @@ def extract_sections(text):
         'projets': '',
         'methodologies': ''
     }
-    # Définition des mots-clés pour chaque section
     keywords = {
         'competences': [r'compétence', r'skills?', r'compétences techniques', r'compétences fonctionnelles'],
         'experience_professionnelle': [r'expériences? professionnelles?', r'parcours professionnel', r'professional experience', r'expériences?'],
@@ -39,7 +36,6 @@ def extract_sections(text):
         'projets': [r'projets?', r'projects?'],
         'methodologies': [r'méthodologies?', r'methodologies?']
     }
-    # Découpage du texte en lignes
     lines = text.split('\n')
     current_section = 'informations_personnelles'
     buffer = {k: [] for k in sections}
@@ -55,29 +51,15 @@ def extract_sections(text):
             if found_section:
                 break
         buffer[current_section].append(line)
-    # Nettoyage et assemblage
     for section in sections:
         content = '\n'.join([l for l in buffer[section] if l.strip()])
         sections[section] = content.strip()
     return sections
 
 def clean_text(text):
-    """
-    Nettoie et normalise le texte extrait d'un CV :
-    - supprime les espaces superflus
-    - retire les caractères spéciaux inutiles
-    - uniformise les majuscules/minuscules
-    - retire les doublons de lignes
-    - standardise les séparateurs
-    """
-    import re
-    # Remplacement des tabulations et retours chariot par des sauts de ligne simples
     text = text.replace('\r', '\n').replace('\t', ' ')
-    # Suppression des espaces multiples
     text = re.sub(r' +', ' ', text)
-    # Suppression des lignes vides ou quasi-vides
     lines = [l.strip() for l in text.split('\n') if l.strip()]
-    # Suppression des doublons de lignes tout en conservant l'ordre
     seen = set()
     cleaned_lines = []
     for l in lines:
@@ -85,6 +67,5 @@ def clean_text(text):
         if l_norm not in seen:
             cleaned_lines.append(l)
             seen.add(l_norm)
-    # Recomposition du texte
     cleaned_text = '\n'.join(cleaned_lines)
     return cleaned_text
