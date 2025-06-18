@@ -82,31 +82,24 @@ def extract_fields_from_sections(sections):
         'projets': [],
         'methodologies': []
     }
-    # --- Informations personnelles ---
     perso = sections.get('informations_personnelles', '')
-    # Nom (première entité PERSON trouvée)
     doc = nlp(perso)
     for ent in doc.ents:
         if ent.label_ == 'PER':
             dossier['informations_personnelles']['nom'] = ent.text
             break
-    # Email
     email = re.search(r'[\w\.-]+@[\w\.-]+', perso)
     if email:
         dossier['informations_personnelles']['email'] = email.group()
-    # Téléphone
     tel = re.search(r'(\+\d{1,3}[-.\s]?)?(\d{2,3}[-.\s]?){3,5}\d{2,4}', perso)
     if tel:
         dossier['informations_personnelles']['telephone'] = tel.group()
-    # Adresse (simple heuristique)
     adresse = re.search(r'(\d{1,4} ?[a-zA-ZéèàêâîôûçÉÈÀÊÂÎÔÛÇ,\.\- ]+)', perso)
     if adresse:
         dossier['informations_personnelles']['adresse'] = adresse.group()
-    # --- Compétences ---
     comp = sections.get('competences', '')
     if comp:
         dossier['competences'] = [c.strip('-• ') for c in comp.split('\n') if c.strip()]
-    # --- Expérience professionnelle ---
     exp = sections.get('experience_professionnelle', '')
     if exp:
         exp_blocks = re.split(r'\n{2,}', exp)
@@ -127,7 +120,6 @@ def extract_fields_from_sections(sections):
                 'dates': dates,
                 'responsabilites': resp
             })
-    # --- Formation ---
     form = sections.get('formation', '')
     if form:
         form_blocks = re.split(r'\n{2,}', form)
@@ -146,19 +138,15 @@ def extract_fields_from_sections(sections):
                 'etablissement': etab,
                 'dates': dates
             })
-    # --- Certifications ---
     cert = sections.get('certifications', '')
     if cert:
         dossier['certifications'] = [c.strip('-• ') for c in cert.split('\n') if c.strip()]
-    # --- Langues ---
     langues = sections.get('langues', '')
     if langues:
         dossier['langues'] = [l.strip('-• ') for l in langues.split('\n') if l.strip()]
-    # --- Projets ---
     projets = sections.get('projets', '')
     if projets:
         dossier['projets'] = [p.strip('-• ') for p in projets.split('\n') if p.strip()]
-    # --- Méthodologies ---
     meth = sections.get('methodologies', '')
     if meth:
         dossier['methodologies'] = [m.strip('-• ') for m in meth.split('\n') if m.strip()]
