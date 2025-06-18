@@ -5,7 +5,11 @@ from utils.file_detector import detect_format
 from utils.extractor import extract_text, clean_text, extract_sections, extract_fields_from_sections
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,
+     resources={r"/*": {"origins": "https://nourbellaj0.github.io"}},
+     supports_credentials=True,
+     allow_headers=["Content-Type"],
+     methods=["GET", "POST", "OPTIONS"])
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
