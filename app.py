@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 from utils.file_detector import detect_format
-from utils.extractor import extract_text
+from utils.extractor import extract_text, clean_text, extract_sections
 
 app = Flask(__name__)
 CORS(app)
@@ -20,18 +20,29 @@ def upload():
         return jsonify({"error": "No file uploaded"}), 400
 
     file = request.files['cv']
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    filename = file.filename or "uploaded_cv"
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
     file_type = detect_format(filepath)
     try:
-        extracted = extract_text(filepath)
+        # 1. Extraction
+        raw_text = extract_text(filepath)
+
+        # 2. Nettoyage
+        cleaned_text = clean_text(raw_text)
+
+        # 3. Catégorisation
+        classified_data = extract_sections(cleaned_text)
+
+        # classified_data is a dictionary with your sections
+        print(classified_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
     return jsonify({
         "format": file_type,
-        "extrait": extracted[:500]  # extrait partiel
+        "extrait": classified_data
     })
 
 if __name__ == "__main__":
