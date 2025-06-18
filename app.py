@@ -7,6 +7,12 @@ from utils.extractor import extract_text, clean_text, extract_sections, extract_
 app = Flask(__name__)
 CORS(app, origins=["https://nourbellaj0.github.io"])
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://nourbellaj0.github.io"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    return response
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
