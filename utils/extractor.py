@@ -1,6 +1,14 @@
 import re
 import spacy
 
+
+try:
+    nlp = spacy.load("fr_core_news_sm")
+except OSError:
+    from spacy.cli import download
+    download("fr_core_news_sm")
+    nlp = spacy.load("fr_core_news_sm")
+
 def extract_text(filepath):
     if filepath.endswith('.pdf'):
         import PyPDF2
