@@ -2,7 +2,8 @@ flask
 PyPDF2
 docx2txt
 flask-cors
-spacy
-keybert
-sentence-transformers
-
+python-docx
+PyPDF2
+openai
+requests
+python-dotenv

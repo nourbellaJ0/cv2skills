@@ -1,72 +1,63 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import os
-from utils.file_detector import detect_format
-from utils.extractor import extract_text, clean_text, extract_sections, extract_fields_from_sections
-from keybert import KeyBERT
+import tempfile
+import requests
+from flask import Flask, request, jsonify
+from utils.files import extract_text_from_file  # ton utilitaire d'extraction
+from dotenv import load_dotenv
+
+load_dotenv()  # pour charger GEMINI_API_KEY depuis un fichier .env si présent
 
 app = Flask(__name__)
-CORS(app, origins=["https://nourbellaj0.github.io"])
 
-@app.after_request
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://nourbellaj0.github.io"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    return response
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyBwY7vwRKPsC0NggJrMFFmWZDpDp1PLI_Q"
 
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+@app.route("/upload", methods=["POST"])
+def upload_cv():
+    file = request.files.get("cv")
+    if not file:
+        return jsonify({"error": "Aucun fichier reçu."}), 400
 
-kw_model = KeyBERT()
+    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+        file.save(tmp.name)
+        text = extract_text_from_file(tmp.name)
 
-def classify_with_keywords(text):
-    keywords = kw_model.extract_keywords(text, keyphrase_ngram_range=(1, 2), stop_words='french')
-    terms = [kw[0].lower() for kw in keywords if isinstance(kw[0], str)]
+    if not text.strip():
+        return jsonify({"error": "Échec de l'extraction du texte."}), 400
 
-    if any(term in ['python', 'java', 'sql', 'flask', 'html', 'docker'] for term in terms):
-        return 'competences'
-    elif any(term in ['université', 'diplôme', 'baccalauréat'] for term in terms):
-        return 'formation'
-    elif any(term in ['stage', 'cdi', 'freelance', 'entreprise'] for term in terms):
-        return 'experience_professionnelle'
-    elif any(term in ['anglais', 'français', 'arabe', 'langue'] for term in terms):
-        return 'langues'
-    else:
-        return 'autres'
+    prompt = f"""Voici un texte extrait d'un CV. Analyse-le et transforme-le en un dossier structuré (JSON) avec les sections suivantes : 
+    - Informations Personnelles 
+    - Compétences 
+    - Expérience Professionnelle 
+    - Formation 
+    - Certifications 
+    - Langues 
+    - Projets 
+    - Méthodologies
 
-@app.route('/')
-def home():
-    return jsonify({"message": "CV2Skills API is running"})
+    Texte :
+    {text}"""
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'cv' not in request.files:
-        return jsonify({"error": "Aucun fichier reçu"}), 400
-
-    file = request.files['cv']
-    filename = file.filename or "uploaded_cv"
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-    file.save(filepath)
-
-    file_type = detect_format(filepath)
+    payload = {
+        "contents": [
+            {
+                "parts": [{"text": prompt}]
+            }
+        ]
+    }
 
     try:
-        raw_text = extract_text(filepath)
-        if not raw_text or len(raw_text.strip()) < 20:
-            return jsonify({"error": "Le texte du CV est vide ou non lisible."}), 400
-
-        cleaned_text = clean_text(raw_text)
-        classified_data = extract_sections(cleaned_text)
-        dossier_competences = extract_fields_from_sections(classified_data)
-
+        response = requests.post(
+            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
+            headers={"Content-Type": "application/json"},
+            json=payload
+        )
+        response.raise_for_status()
+        gemini_data = response.json()
+        generated_text = gemini_data['candidates'][0]['content']['parts'][0]['text']
+        return jsonify({"result": generated_text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    return jsonify({
-        "format": file_type,
-        "dossier_competences": dossier_competences
-    })
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+    app.run(debug=True)
