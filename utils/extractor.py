@@ -1,11 +1,3 @@
-import re
-import spacy
-from utils.matcher import classify_block
-
-PARA_SPLIT = re.compile(r"\n{2,}")
-DATE_RGX   = re.compile(r"(\w+ \d{4})\s*[–-]\s*(\w+|\d{4}|présent)", re.I)
-LANG_RGX   = re.compile(r"\b(anglais|français|arabe|espagnol|allemand|italien)\b", re.I)
-
 def extract_text(filepath):
     if filepath.endswith('.pdf'):
         import PyPDF2
@@ -18,73 +10,81 @@ def extract_text(filepath):
     elif filepath.endswith('.txt'):
         with open(filepath, 'r', encoding='utf-8') as f:
             return f.read()
-    return "Format non supporté"
-
-def clean_text(text):
-    text = text.replace('\r', '\n').replace('\t', ' ')
-    text = re.sub(r' +', ' ', text)
-    lines = [l.strip() for l in text.split('\n') if l.strip()]
-    seen = set()
-    return '\n'.join(l for l in lines if not (l.lower() in seen or seen.add(l.lower())))
+    else:
+        return "Format non supporté"
 
 def extract_sections(text):
-    paras = [p.strip() for p in PARA_SPLIT.split(text) if p.strip()]
-    buffer = {}
-    for p in paras:
-        section = classify_block(p)
-        buffer.setdefault(section, []).append(p)
-    return {k: "\n\n".join(v) for k, v in buffer.items()}
-
-def extract_fields_from_sections(sections):
-    nlp = spacy.load("fr_core_news_sm")
-    dossier = {
-        "informations_personnelles": {},
-        "competences": [],
-        "experience_professionnelle": [],
-        "formation": [],
-        "certifications": [],
-        "langues": [],
-        "projets": [],
-        "methodologies": []
+    """
+    Identifie et catégorise les sections clés d'un CV à partir du texte brut.
+    Retourne un dictionnaire avec les sections détectées.
+    """
+    import re
+    sections = {
+        'informations_personnelles': '',
+        'competences': '',
+        'experience_professionnelle': '',
+        'formation': '',
+        'certifications': '',
+        'langues': '',
+        'projets': '',
+        'methodologies': ''
     }
-    perso = sections.get("informations_personnelles", "")
-    doc = nlp(perso)
-    for ent in doc.ents:
-        if ent.label_ == "PER":
-            dossier["informations_personnelles"]["nom"] = ent.text
-        elif ent.label_ == "LOC" and "adresse" not in dossier["informations_personnelles"]:
-            dossier["informations_personnelles"]["adresse"] = ent.text
-    email_match = re.search(r"[\w\.-]+@[\w\.-]+", perso)
-    dossier["informations_personnelles"]["email"] = email_match.group(0) if email_match else ""
-    tel_match = re.search(r"(?:\+?\d[\d\s.-]{7,})", perso)
-    dossier["informations_personnelles"]["telephone"] = tel_match.group(0) if tel_match else ""
+    # Définition des mots-clés pour chaque section
+    keywords = {
+        'competences': [r'compétence', r'skills?', r'compétences techniques', r'compétences fonctionnelles'],
+        'experience_professionnelle': [r'expériences? professionnelles?', r'parcours professionnel', r'professional experience', r'expériences?'],
+        'formation': [r'formation', r'education', r'diplômes?', r'scolarité'],
+        'certifications': [r'certifications?', r'certificat'],
+        'langues': [r'langues?', r'languages?'],
+        'projets': [r'projets?', r'projects?'],
+        'methodologies': [r'méthodologies?', r'methodologies?']
+    }
+    # Découpage du texte en lignes
+    lines = text.split('\n')
+    current_section = 'informations_personnelles'
+    buffer = {k: [] for k in sections}
+    for line in lines:
+        line_stripped = line.strip().lower()
+        found_section = False
+        for section, kw_list in keywords.items():
+            for kw in kw_list:
+                if re.search(rf'^\s*{kw}\b', line_stripped):
+                    current_section = section
+                    found_section = True
+                    break
+            if found_section:
+                break
+        buffer[current_section].append(line)
+    # Nettoyage et assemblage
+    for section in sections:
+        content = '\n'.join([l for l in buffer[section] if l.strip()])
+        sections[section] = content.strip()
+    return sections
 
-    dossier["competences"] = [c.strip("-••– ") for c in sections.get("competences", "").split("\n") if 3 < len(c) < 60]
-    dossier["langues"] = list(set(LANG_RGX.findall("\n".join(sections.values()))))
-
-    for block in PARA_SPLIT.split(sections.get("formation", "")):
-        doc = nlp(block)
-        etab = dates = diplome = ""
-        for ent in doc.ents:
-            if ent.label_ == "ORG": etab = ent.text
-            if ent.label_ == "DATE": dates = ent.text
-        match = re.search(r"(licence|master|bachelor|baccalaur[ée]at)", block, re.I)
-        diplome = match.group(0) if match else ""
-        if block: dossier["formation"].append({"diplome": diplome, "etablissement": etab, "dates": dates})
-
-    for block in PARA_SPLIT.split(sections.get("experience_professionnelle", "")):
-        top_line = block.split("\n")[0]
-        poste, entreprise = "", ""
-        if "," in top_line:
-            poste, entreprise = [x.strip() for x in top_line.split(",", 1)]
-        dates = DATE_RGX.search(block)
-        dossier["experience_professionnelle"].append({
-            "poste": poste, "entreprise": entreprise,
-            "dates": dates.group(0) if dates else "", "responsabilites": block
-        })
-
-    for key in ("certifications", "projets", "methodologies"):
-        bloc = sections.get(key, "")
-        dossier[key] = [l.strip("-• ") for l in bloc.split("\n") if l.strip()]
-
-    return dossier
+def clean_text(text):
+    """
+    Nettoie et normalise le texte extrait d'un CV :
+    - supprime les espaces superflus
+    - retire les caractères spéciaux inutiles
+    - uniformise les majuscules/minuscules
+    - retire les doublons de lignes
+    - standardise les séparateurs
+    """
+    import re
+    # Remplacement des tabulations et retours chariot par des sauts de ligne simples
+    text = text.replace('\r', '\n').replace('\t', ' ')
+    # Suppression des espaces multiples
+    text = re.sub(r' +', ' ', text)
+    # Suppression des lignes vides ou quasi-vides
+    lines = [l.strip() for l in text.split('\n') if l.strip()]
+    # Suppression des doublons de lignes tout en conservant l'ordre
+    seen = set()
+    cleaned_lines = []
+    for l in lines:
+        l_norm = l.lower()
+        if l_norm not in seen:
+            cleaned_lines.append(l)
+            seen.add(l_norm)
+    # Recomposition du texte
+    cleaned_text = '\n'.join(cleaned_lines)
+    return cleaned_text

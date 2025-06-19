@@ -1,60 +1,63 @@
-
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import os
+import tempfile
+import requests
+from flask import Flask, request, jsonify
+from utils.files import extract_text_from_file  # ton utilitaire d'extraction
 from dotenv import load_dotenv
-from utils.file_detector import detect_format
-from utils.extractor import extract_text, clean_text
-from utils.gemini_classifier import classify_with_gemini
 
-# Charger les variables d'environnement (.env)
-load_dotenv()
+load_dotenv()  # pour charger GEMINI_API_KEY depuis un fichier .env si présent
 
 app = Flask(__name__)
-CORS(app, origins=["https://nourbellaj0.github.io"])
 
-@app.after_request
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://nourbellaj0.github.io"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    return response
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyBwY7vwRKPsC0NggJrMFFmWZDpDp1PLI_Q"
 
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+@app.route("/upload", methods=["POST"])
+def upload_cv():
+    file = request.files.get("cv")
+    if not file:
+        return jsonify({"error": "Aucun fichier reçu."}), 400
 
-@app.route('/')
-def home():
-    return jsonify({"message": "CV2Skills (Gemini) API is running"})
+    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+        file.save(tmp.name)
+        text = extract_text_from_file(tmp.name)
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'cv' not in request.files:
-        return jsonify({"error": "Aucun fichier reçu"}), 400
+    if not text.strip():
+        return jsonify({"error": "Échec de l'extraction du texte."}), 400
 
-    file = request.files['cv']
-    filename = file.filename or "uploaded_cv"
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-    file.save(filepath)
+    prompt = f"""Voici un texte extrait d'un CV. Analyse-le et transforme-le en un dossier structuré (JSON) avec les sections suivantes : 
+    - Informations Personnelles 
+    - Compétences 
+    - Expérience Professionnelle 
+    - Formation 
+    - Certifications 
+    - Langues 
+    - Projets 
+    - Méthodologies
 
-    file_type = detect_format(filepath)
+    Texte :
+    {text}"""
+
+    payload = {
+        "contents": [
+            {
+                "parts": [{"text": prompt}]
+            }
+        ]
+    }
 
     try:
-        raw_text = extract_text(filepath)
-        if not raw_text or len(raw_text.strip()) < 20:
-            return jsonify({"error": "Le texte du CV est vide ou non lisible."}), 400
-
-        cleaned_text = clean_text(raw_text)
-        dossier_competences = classify_with_gemini(cleaned_text)
-
+        response = requests.post(
+            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
+            headers={"Content-Type": "application/json"},
+            json=payload
+        )
+        response.raise_for_status()
+        gemini_data = response.json()
+        generated_text = gemini_data['candidates'][0]['content']['parts'][0]['text']
+        return jsonify({"result": generated_text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    return jsonify({
-        "format": file_type,
-        "dossier_competences": dossier_competences
-    })
-
 if __name__ == "__main__":
-   app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
+    app.run(debug=True)
