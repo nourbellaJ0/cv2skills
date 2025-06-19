@@ -3,3 +3,6 @@ PyPDF2
 docx2txt
 flask-cors
 spacy
+keybert
+sentence-transformers
+
