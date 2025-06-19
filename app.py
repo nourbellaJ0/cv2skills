@@ -3,6 +3,7 @@ import tempfile
 import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 from utils.extractor import extract_text, clean_text
 # Si tu veux aussi extraire les sections localement : from utils.extractor import extract_sections
