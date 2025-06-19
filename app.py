@@ -1,9 +1,14 @@
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+from dotenv import load_dotenv
 from utils.file_detector import detect_format
-from utils.extractor import extract_text, clean_text, extract_sections, extract_fields_from_sections
-from keybert import KeyBERT
+from utils.extractor import extract_text, clean_text
+from utils.gemini_classifier import classify_with_gemini
+
+# Charger les variables d'environnement (.env)
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins=["https://nourbellaj0.github.io"])
@@ -18,26 +23,9 @@ def add_cors_headers(response):
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-kw_model = KeyBERT()
-
-def classify_with_keywords(text):
-    keywords = kw_model.extract_keywords(text, keyphrase_ngram_range=(1, 2), stop_words='french')
-    terms = [kw[0].lower() for kw in keywords if isinstance(kw[0], str)]
-
-    if any(term in ['python', 'java', 'sql', 'flask', 'html', 'docker'] for term in terms):
-        return 'competences'
-    elif any(term in ['université', 'diplôme', 'baccalauréat'] for term in terms):
-        return 'formation'
-    elif any(term in ['stage', 'cdi', 'freelance', 'entreprise'] for term in terms):
-        return 'experience_professionnelle'
-    elif any(term in ['anglais', 'français', 'arabe', 'langue'] for term in terms):
-        return 'langues'
-    else:
-        return 'autres'
-
 @app.route('/')
 def home():
-    return jsonify({"message": "CV2Skills API is running"})
+    return jsonify({"message": "CV2Skills (Gemini) API is running"})
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -57,8 +45,7 @@ def upload():
             return jsonify({"error": "Le texte du CV est vide ou non lisible."}), 400
 
         cleaned_text = clean_text(raw_text)
-        classified_data = extract_sections(cleaned_text)
-        dossier_competences = extract_fields_from_sections(classified_data)
+        dossier_competences = classify_with_gemini(cleaned_text)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
