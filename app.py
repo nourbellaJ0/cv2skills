@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 from utils.file_detector import detect_format
 from utils.extractor import extract_text, clean_text, extract_sections, extract_fields_from_sections
+from keybert import KeyBERT
 
 app = Flask(__name__)
 CORS(app, origins=["https://nourbellaj0.github.io"])
@@ -16,6 +17,23 @@ def add_cors_headers(response):
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+kw_model = KeyBERT()
+
+def classify_with_keywords(text):
+    keywords = kw_model.extract_keywords(text, keyphrase_ngram_range=(1, 2), stop_words='french')
+    terms = [kw[0].lower() for kw in keywords if isinstance(kw[0], str)]
+
+    if any(term in ['python', 'java', 'sql', 'flask', 'html', 'docker'] for term in terms):
+        return 'competences'
+    elif any(term in ['université', 'diplôme', 'baccalauréat'] for term in terms):
+        return 'formation'
+    elif any(term in ['stage', 'cdi', 'freelance', 'entreprise'] for term in terms):
+        return 'experience_professionnelle'
+    elif any(term in ['anglais', 'français', 'arabe', 'langue'] for term in terms):
+        return 'langues'
+    else:
+        return 'autres'
 
 @app.route('/')
 def home():

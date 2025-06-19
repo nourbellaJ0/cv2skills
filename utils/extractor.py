@@ -24,44 +24,17 @@ def extract_text(filepath):
     else:
         return "Format non supporté"
 
+from utils.matcher import classify_block
+
 def extract_sections(text):
-    sections = {
-        'informations_personnelles': '',
-        'competences': '',
-        'experience_professionnelle': '',
-        'formation': '',
-        'certifications': '',
-        'langues': '',
-        'projets': '',
-        'methodologies': ''
-    }
-    keywords = {
-        'competences': [r'compétence', r'skills?', r'compétences techniques', r'compétences fonctionnelles'],
-        'experience_professionnelle': [r'expériences? professionnelles?', r'parcours professionnel', r'professional experience', r'expériences?'],
-        'formation': [r'formation', r'education', r'diplômes?', r'scolarité'],
-        'certifications': [r'certifications?', r'certificat'],
-        'langues': [r'langues?', r'languages?'],
-        'projets': [r'projets?', r'projects?'],
-        'methodologies': [r'méthodologies?', r'methodologies?']
-    }
-    lines = text.split('\n')
-    current_section = 'informations_personnelles'
-    buffer = {k: [] for k in sections}
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    buffer = {}
+    
     for line in lines:
-        line_stripped = line.strip().lower()
-        found_section = False
-        for section, kw_list in keywords.items():
-            for kw in kw_list:
-                if re.search(rf'^\s*{kw}\b', line_stripped):
-                    current_section = section
-                    found_section = True
-                    break
-            if found_section:
-                break
-        buffer[current_section].append(line)
-    for section in sections:
-        content = '\n'.join([l for l in buffer[section] if l.strip()])
-        sections[section] = content.strip()
+        section = classify_block(line)
+        buffer.setdefault(section, []).append(line)
+
+    sections = {k: "\n".join(v) for k, v in buffer.items()}
     return sections
 
 def clean_text(text):
