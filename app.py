@@ -113,8 +113,14 @@ def upload_cv():
         response.raise_for_status()
         gemini_data = response.json()
         generated_text = gemini_data['candidates'][0]['content']['parts'][0]['text']
+        # Nettoyage : supprimer les délimitations Markdown ```json ... ```
+        
+        generated_text = generated_text.strip()
+        if generated_text.startswith("```json"):
+            generated_text = generated_text[len("```json"):].strip()
+        if generated_text.endswith("```"):
+            generated_text = generated_text[:-3].strip()
 
-        # Essayer de parser comme JSON
         try:
             structured_json = json.loads(generated_text)
             return jsonify({"success": True, "data": structured_json})
@@ -124,7 +130,6 @@ def upload_cv():
                 "error": "Le résultat n'est pas un JSON valide. Structure par défaut retournée.",
                 "data": DEFAULT_STRUCTURE
             })
-
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur Gemini : {str(e)}"}), 500
 
