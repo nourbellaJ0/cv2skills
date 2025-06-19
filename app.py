@@ -6,6 +6,7 @@ import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from utils.file_detector import detect_format
 
 from utils.extractor import extract_text, clean_text
 
