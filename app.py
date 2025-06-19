@@ -10,7 +10,7 @@ from utils.extractor import extract_text, clean_text
 load_dotenv()  # Charge GEMINI_API_KEY depuis .env si présent
 
 app = Flask(__name__)
-
+CORS(app) 
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyBwY7vwRKPsC0NggJrMFFmWZDpDp1PLI_Q"
 
