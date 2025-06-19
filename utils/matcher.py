@@ -1,25 +1,26 @@
+# utils/matcher.py
 import re
 from keybert import KeyBERT
-
 kw_model = KeyBERT()
 
-def classify_block(text):
-    keywords = kw_model.extract_keywords(text, keyphrase_ngram_range=(1, 2), stop_words='french')
-    terms = [kw[0].lower() for kw in keywords if isinstance(kw[0], str)]
+SECTION_RULES = {
+    "competences":  [r"\b(compétence|skills?)\b"],
+    "formation":    [r"\b(licence|master|dipl[oô]me|université|baccalaur[ée]at)\b"],
+    "experience_professionnelle":
+        [r"\b(stage|alternance|cdi|freelance|expériences?)\b", r",\s?(?:sarl|sa|inc|ltd)?\s?$"],
+    "langues":      [r"\b(langues?|anglais|français|arabe|espagnol|allemand)\b"],
+    "certifications":[r"\b(certifications?|certificat|toeic|pmp|scrum)\b"],
+    "methodologies":[r"\b(agile|scrum|kanban|waterfall)\b"],
+    "projets":      [r"\b(projet[s]?|project[s]?)\b"],
+}
 
-    if any(term in ['python', 'java', 'sql', 'flask', 'html', 'docker'] for term in terms):
-        return 'competences'
-    elif any(term in ['université', 'diplôme', 'baccalauréat', 'école', 'formation'] for term in terms):
-        return 'formation'
-    elif any(term in ['stage', 'cdi', 'freelance', 'chez', 'entreprise', 'expérience'] for term in terms):
-        return 'experience_professionnelle'
-    elif any(term in ['anglais', 'français', 'arabe', 'langue', 'language'] for term in terms):
-        return 'langues'
-    elif any(term in ['agile', 'scrum', 'kanban', 'waterfall'] for term in terms):
-        return 'methodologies'
-    elif any(term in ['certification', 'certificat', 'toeic', 'pmp'] for term in terms):
-        return 'certifications'
-    elif any(term in ['projet', 'project', 'réalisé', 'conception'] for term in terms):
-        return 'projets'
-    else:
-        return 'autres'
+def classify_block(text: str) -> str:
+    low = text.lower()
+    for section, patterns in SECTION_RULES.items():
+        if any(re.search(p, low) for p in patterns):
+            return section
+    # fallback KeyBERT
+    terms = [kw[0].lower() for kw in kw_model.extract_keywords(text, stop_words='french')]
+    if any(t in ['python', 'sql', 'docker', 'html', 'marketing'] for t in terms):
+        return "competences"
+    return "autres"
