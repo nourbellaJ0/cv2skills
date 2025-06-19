@@ -1,4 +1,3 @@
-# utils/matcher.py
 import re
 from keybert import KeyBERT
 kw_model = KeyBERT()
@@ -19,8 +18,7 @@ def classify_block(text: str) -> str:
     for section, patterns in SECTION_RULES.items():
         if any(re.search(p, low) for p in patterns):
             return section
-    # fallback KeyBERT
-    terms = [kw[0].lower() for kw in kw_model.extract_keywords(text, stop_words='french')]
+    terms = [kw[0].lower() for kw in kw_model.extract_keywords(text, stop_words='french') if isinstance(kw[0], str)]
     if any(t in ['python', 'sql', 'docker', 'html', 'marketing'] for t in terms):
         return "competences"
     return "autres"
