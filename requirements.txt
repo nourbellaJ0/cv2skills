@@ -1,9 +1,6 @@
-flask
+Flask
+requests
 PyPDF2
 docx2txt
-flask-cors
-python-docx
-PyPDF2
-openai
-requests
 python-dotenv
+gunicorn
