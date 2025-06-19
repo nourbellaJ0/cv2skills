@@ -57,11 +57,11 @@ def upload_cv():
         return jsonify({"success": False, "error": "Aucun fichier reçu."}), 400
 
     try:
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file.filename.rsplit('.', 1)[-1]}") as tmp:
             file.save(tmp.name)
-
             # Détection du format
             file_format = detect_format(tmp.name)
+            print(f"Format MIME détecté : {file_format}")
             if file_format not in SUPPORTED_MIME_TYPES:
                 return jsonify({
                     "success": False,
