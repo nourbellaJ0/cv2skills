@@ -31,18 +31,18 @@ SUPPORTED_MIME_TYPES = [
 # Structure par défaut
 DEFAULT_STRUCTURE = {
     "Informations Personnelles": {
-        "Nom": "Votre Nom",
-        "Prénom": "Votre Prénom",
-        "Adresse": "Votre Adresse",
-        "Téléphone": "Votre Numéro de Téléphone",
-        "Email": "Votre Adresse Email"
+        "Nom": "",
+        "Prénom": "",
+        "Adresse": "",
+        "Téléphone": "",
+        "Email": ""
     },
-    "Compétences": [],
-    "Expérience Professionnelle": [],
-    "Formation": [],
-    "Certifications": [],
+    "Expériences Clés Récentes": [],
+    "Expériences Professionnelles": [],
+    "Formation et Certifications": [],
     "Langues": [],
-    "Projets": [],
+    "Compétences Techniques": [],
+    "Projets Intéressants": [],
     "Méthodologies": []
 }
 
@@ -80,21 +80,23 @@ def upload_cv():
 
     cleaned_text = clean_text(text)
 
-    prompt = f"""Voici un texte brut extrait d’un CV. Convertis-le en un JSON structuré avec ces sections :
-    - Informations Personnelles
-    - Compétences
-    - Expérience Professionnelle
-    - Formation
-    - Certifications
-    - Langues
-    - Projets
-    - Méthodologies
+    prompt = f"""Voici un texte brut extrait d’un CV. Analyse-le et convertis-le en un JSON structuré qui suit **strictement** le format suivant, inspiré d’un modèle graphique de CV :
 
-    Donne uniquement le JSON, sans explication ni formatage Markdown.
+- Informations Personnelles : {{ "Nom": ..., "Prénom": ..., "Adresse": ..., "Téléphone": ..., "Email": ... }}
+- Expériences Clés Récentes : [ {{ "Intitulé": ..., "Entreprise": ..., "Année": ..., "Détails": ... }} ]
+- Expériences Professionnelles : [ {{ "Poste": ..., "Entreprise": ..., "Période": ..., "Missions": [...] }} ]
+- Formation et Certifications : [ {{ "Diplôme/Certification": ..., "Établissement": ..., "Année": ... }} ]
+- Langues : [ {{ "Langue": ..., "Niveau": "Natif / C2 / B2 / etc." }} ]
+- Compétences Techniques : [ "Compétence 1", "Compétence 2", ... ]
+- Projets Intéressants : [ {{ "Titre": ..., "Description": ..., "Technologies": [...] }} ]
+- Méthodologies : [ "Agile", "Scrum", etc. ]
 
-    Texte du CV :
-    {cleaned_text}
-    """
+Si des informations ne sont pas clairement présentes, tente de les déduire ou les reformuler proprement à partir du contexte. Donne uniquement un JSON valide, sans explication ni markdown.
+
+Texte du CV :
+{cleaned_text}
+"""
+
 
     payload = {
         "contents": [
