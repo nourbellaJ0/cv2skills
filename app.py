@@ -3,10 +3,7 @@ import tempfile
 import mimetypes
 import requests
 import json
-import sys
-sys.path.append("apryse_sdk/lib")  # 👈 ajuste ce chemin si besoin
-from PDFNetPython3 import PDFNet, Convert
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from utils.file_detector import detect_format
@@ -137,36 +134,6 @@ Texte du CV :
             })
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur Gemini : {str(e)}"}), 500
-
-@app.route("/generate-pdf", methods=["POST"])
-def generate_pdf():
-    try:
-        json_data = request.form.get("jsonData")
-        if not json_data:
-            return jsonify({"success": False, "error": "Données JSON manquantes."}), 400
-
-        data = json.loads(json_data)
-        template_path = os.path.join("templates", "template.docx")
-
-        if not os.path.exists(template_path):
-            return jsonify({"success": False, "error": "Modèle template.docx introuvable."}), 500
-
-        # Initialisation Apryse
-        PDFNet.Initialize()
-
-        # Création du template avec données JSON
-        template_doc = Convert.createOfficeTemplateWithPath(template_path)
-        filled_pdf = template_doc.fillTemplateJson(json.dumps(data))
-
-        # Sauvegarde temporaire du PDF
-        temp_fd, output_path = tempfile.mkstemp(suffix=".pdf")
-        os.close(temp_fd)
-        filled_pdf.save(output_path, 0)
-
-        return send_file(output_path, as_attachment=True, download_name="cv2skills_result.pdf")
-
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
