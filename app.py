@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from utils.file_detector import detect_format
 
 from utils.extractor import extract_text, clean_text
+import PyPDF2  # Forcer l'inclusion de PyPDF2
 
 # Chargement des variables d’environnement
 load_dotenv()
@@ -73,6 +74,7 @@ def upload_cv():
             text = extract_text(tmp.name)
 
     except Exception as e:
+        print('Erreur lors de l\'upload:', e)
         return jsonify({"success": False, "error": f"Erreur d'extraction : {str(e)}"}), 500
 
     if not text.strip():
@@ -134,6 +136,10 @@ Texte du CV :
             })
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur Gemini : {str(e)}"}), 500
+
+@app.route("/")
+def home():
+    return "<h2>API en ligne. Utilisez /upload pour envoyer un CV.</h2>"
 
 if __name__ == "__main__":
     app.run(debug=True)
