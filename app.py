@@ -236,6 +236,7 @@ def generate_pdf_apryse_template():
         print("📄 jsonData reçu (début):", json_data[:300])
         data = sanitize_json(json.loads(json_data))
 
+
         input_template = os.path.join("template.docx")
         if not os.path.exists(input_template):
             return jsonify({"success": False, "error": "Template DOCX introuvable"}), 500
