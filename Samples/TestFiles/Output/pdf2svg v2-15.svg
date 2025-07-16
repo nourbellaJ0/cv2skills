@@ -1,0 +1,307 @@
+<?xml-stylesheet type="text/css" href="pdf2svg v2.css"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- PDFTron PDFNet Generated! Version: 11.6.0-0da7dc9744 -->
+<svg id="svgRoot" version="1.1" baseProfile="Full" width="595px" height="841px" viewBox="0 0 595 841" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:cs="http://www.pdftron.com/pdf2svg" xml:space="preserve">
+<defs>
+</defs>
+<style type="text/css">
+<![CDATA[
+.ps03 { stroke:#000000;fill:none; }
+.ps06 { stroke:#006BB7;fill:none; }
+.ps09 { stroke:#3B95D4;fill-opacity:0.098039;stroke-opacity:0.19608;fill:#3B95D4;fill-rule:evenodd; }
+.ps07 { stroke:none;fill:#000000; }
+.ps02 { stroke:none;fill:#000000;fill-rule:evenodd; }
+.ps05 { stroke:none;fill:#006BB7; }
+.ps01 { stroke:none;fill:#AEC3E5;fill-rule:evenodd; }
+.ps08 { stroke:none;fill:#C7D4ED;fill-rule:evenodd; }
+.ps04 { stroke:none;fill:#FFFFFF;fill-rule:evenodd; }
+.ps00 { stroke:none;fill:none; }
+.ps12 { stroke-width:0.25;stroke-linejoin:round;stroke-dasharray:none; }
+.ps10 { stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none; }
+.ps11 { stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none; }
+.ps24 { 
+letter-spacing:-0.18px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:9px; }
+.ps25 { 
+letter-spacing:-0.18px;word-spacing:0;font-family:fnt3;font-style:normal;font-weight:normal;font-size:9px; }
+.ps216 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:10px; }
+.ps213 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:12px; }
+.ps211 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:13px; }
+.ps29 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:14px; }
+.ps20 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:18px; }
+.ps212 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:20px; }
+.ps23 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:24px; }
+.ps27 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:36px; }
+.ps21 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt0;font-style:normal;font-weight:normal;font-size:9px; }
+.ps214 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt2;font-style:normal;font-weight:normal;font-size:9px; }
+.ps215 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt3;font-style:normal;font-weight:normal;font-size:10px; }
+.ps210 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt3;font-style:normal;font-weight:normal;font-size:11px; }
+.ps28 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt3;font-style:normal;font-weight:normal;font-size:14px; }
+.ps26 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt3;font-style:normal;font-weight:normal;font-size:9px; }
+.ps22 { 
+letter-spacing:0px;word-spacing:0;font-family:fnt4;font-style:normal;font-weight:normal;font-size:9px; }
+]]>
+</style>
+<clipPath id="clp1" clip-rule="nonzero">
+<rect x="0" y="0" width="595" height="841"/>
+</clipPath>
+<g clip-path="url(#clp1)" transform="matrix(1 0 0 -1 -0 841)">
+<g id="q1" class="">
+<g id="q2" class="">
+<clipPath id="clp2" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp2)">
+<clipPath id="clp3" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp3)">
+<path d="M362.96 805 L560.54 805 L560.54 782.32 L362.96 782.32 ZM85 776" class="ps01"/>
+<text transform="matrix(1 0 0 -1 417.96 789.7)"><tspan xml:space="preserve" x="0,9.378,13.878,28.512,38.826,45.018,50.274,59.094,67.716,78.03,88.344,96.966,104.09,114.41,118.91,123.41,132.79,137.29" y="-0" class="ps02 ps20">~ Noticeboard  ~  </tspan>
+</text>
+<path d="M560.5 782 L33.25 782" class="ps03 ps10 ps20"/>
+</g>
+</g>
+</g>
+<g id="q3" class="">
+<clipPath id="clp4" clip-rule="evenodd">
+<path d="M296.43 434.57 L573.71 434.57 L573.71 242.37 L296.43 242.37 ZM559.77 789.7"/>
+</clipPath>
+<g clip-path="url(#clp4)">
+<clipPath id="clp5" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp5)">
+<clipPath id="clp6" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp6)">
+<g id="q4" class="ps00">
+<g id="xfrm5" transform="matrix(266.5514 0 0 191.2524 296.28 242.2676)">
+<defs>
+  <mask id="msk91" maskUnits="userSpaceOnUse" x="0" y="0" width="1" height="1">
+<image width="1" height="1" preserveAspectRatio="none" image-rendering="optimizeSpeed" xlink:href="pdf2svg v2_msk91.png"/>
+</mask></defs>
+<rect x="0" y="0" width="1" height="1" transform="matrix(1 0 0 -1 0 1)" stroke="none" fill="#000000" mask="url(#msk91)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="q6" class="">
+<clipPath id="clp7" clip-rule="nonzero">
+<path d="M343 239.34 L459 239.34 L343 239.34M316 237 L316 236 L301 236 L301 210 L300 210 L300 209 L301 209 L301 190 L300 190 L300 186 L301 186 L301 166 L298 166 L298 165 L300 165 L300 163 L301 163 L301 127 L300 127 L300 122 L301 122 L301 111 L300 111 L300 110 L301 110 L301 106 L300 106 L300 48 L301 48 L301 47 L303 47 L303 46 L313 46 L313 45 L406 45 L406 44 L521 44 L521 46 L561 46 L561 165 L562 165 L562 166 L561 166 L561 201 L562 201 L562 202 L561 202 L561 221 L562 221 L562 222 L561 222 L561 235 L550 235 L550 236 L501 236 L501 237 L316 237M326 42 L327 42 L327 43 L326 43 ZM429 40 L430 40 L430 41 L429 41 Z"/>
+</clipPath>
+<g clip-path="url(#clp7)">
+<g id="q7" class="ps00">
+<g id="xfrm8" transform="matrix(270.8123 0 0 201.8054 294.25 38.3346)">
+<image id="img92" width="1" height="1" transform="matrix(1 0 0 -1 0 1)" preserveAspectRatio="none" image-rendering="optimizeSpeed" xlink:href="pdf2svg v2_img92.png"/>
+</g>
+</g>
+</g>
+</g>
+<g id="q9" class="">
+<clipPath id="clp8" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp8)">
+<clipPath id="clp9" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp9)">
+<path d="M22.75 434.57 L295.64 434.57 L295.64 236.43 L22.75 236.43 ZM559.77 789.7" class="ps04"/>
+<g id="q10" class="ps04">
+<g id="xfrm11" transform="matrix(260.7838 0 0 188.831 34.77 241.579)">
+<defs>
+  <mask id="msk93" maskUnits="userSpaceOnUse" x="0" y="0" width="1" height="1">
+<image width="1" height="1" preserveAspectRatio="none" image-rendering="optimizeSpeed" xlink:href="pdf2svg v2_msk93.png"/>
+</mask></defs>
+<rect x="0" y="0" width="1" height="1" transform="matrix(1 0 0 -1 0 1)" stroke="none" fill="#000000" mask="url(#msk93)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="q12" class="">
+<clipPath id="clp10" clip-rule="evenodd">
+<path d="M34.29 624.27 L290.24 624.27 L290.24 439.55 L34.29 439.55 ZM559.77 789.7"/>
+</clipPath>
+<g clip-path="url(#clp10)">
+<clipPath id="clp11" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp11)">
+<clipPath id="clp12" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp12)">
+<g id="q13" class="ps00">
+<g id="xfrm14" transform="matrix(256.3999 0 0 184.9766 34.16 439.4234)">
+<defs>
+  <mask id="msk94" maskUnits="userSpaceOnUse" x="0" y="0" width="1" height="1">
+<image width="1" height="1" preserveAspectRatio="none" image-rendering="optimizeSpeed" xlink:href="pdf2svg v2_msk94.png"/>
+</mask></defs>
+<rect x="0" y="0" width="1" height="1" transform="matrix(1 0 0 -1 0 1)" stroke="none" fill="#000000" mask="url(#msk94)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="q15" class="">
+<clipPath id="clp13" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp13)">
+<clipPath id="clp14" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp14)">
+<path d="M33.79 624.77 L290.74 624.77 L290.74 439.05 L33.79 439.05 ZM559.77 789.7" class="ps03 ps11"/>
+<text transform="matrix(1 0 0 -1 178.19 753.81)"><tspan xml:space="preserve" x="0,6.561,11.628,15.939" y="-0" class="ps05 ps11 ps21">The </tspan>
+<tspan x="18.19,25.129,28.504,34.507" y="-0" class="ps05 ps11 ps22">News</tspan>
+<tspan x="37.6,43.036,47.347,50.443,53.539,57.85,61.414,63.664,68.821,73.978,81.007,83.257,88.324,92.635,96.01,98.26,102.57,104.82,109.23,111.86,115.42,119.83,124.99,127.43,131.74,134.84,137.46,142.62,147.78,150.03,155.19,158.09,160.34,164.84,167.66,172.16,176.66,181.16,183.41,192.41,194.66,197.76,202.91,205.16,210.32,212.76,217.07,221.48,225.79,228.04,232.35,237.51,239.76,244.07,249.23,253.92,258.23,261.79,264.89,267.51,270.89,275.2,283.54,287.85,293.01,296.11,298.36,303.51,305.95,310.26,314.58,317.95,322.26,324.51,328.92,333.23,335.67,338.11,340.36,344.67,349.45,352.55,354.8,359.3,363.8,368.3" y="-0" class="ps05 ps11 ps21">Letter now has a circulation of 4,150 &#xD1; to place an advertisement please call ext 5798</tspan>
+</text>
+<path d="M166.94 769.46 L560.04 769.46 L560.04 742.12 L166.94 742.12 ZM551.03 753.81" class="ps06 ps11 ps21"/>
+<path d="M33.29 770.09 L156.6 770.09 L156.6 738.24 L33.29 738.24 Z" class="ps01 ps11 ps21"/>
+<text transform="matrix(1 0 0 -1 44.69 748.88)"><tspan x="0,13.512,35.76,47.256,53.76,60.264,66.264,77.76,91.512" y="-0" class="ps02 ps11 ps23">Small ads</tspan>
+</text>
+</g>
+</g>
+</g>
+<g id="q16" class="">
+<clipPath id="clp15" clip-rule="evenodd">
+<path d="M438.23 721.68 L559.54 721.68 L559.54 440.22 L438.23 440.22 ZM145.2 748.88"/>
+</clipPath>
+<g clip-path="url(#clp15)">
+<clipPath id="clp16" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp16)">
+<clipPath id="clp17" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp17)">
+<g id="q17" class="ps00">
+<g id="xfrm18" transform="matrix(121.6769 0 0 280.4817 438.08 441.3783)">
+<defs>
+  <mask id="msk95" maskUnits="userSpaceOnUse" x="0" y="0" width="1" height="1">
+<image width="1" height="1" preserveAspectRatio="none" image-rendering="optimizeSpeed" xlink:href="pdf2svg v2_msk95.png"/>
+</mask></defs>
+<rect x="0" y="0" width="1" height="1" transform="matrix(1 0 0 -1 0 1)" stroke="none" fill="#000000" mask="url(#msk95)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="q19" class="">
+<clipPath id="clp18" clip-rule="nonzero">
+<path d="M0 841 L595 841 L595 0 L0 0 ZM0 841"/>
+</clipPath>
+<g clip-path="url(#clp18)">
+<clipPath id="clp19" clip-rule="nonzero">
+<path d="M0.06 840.96 L595.02 840.96 L595.02 0 L0.06 0 Z"/>
+</clipPath>
+<g clip-path="url(#clp19)">
+<path d="M437.73 722.18 L560.04 722.18 L560.04 439.72 L437.73 439.72 ZM145.2 748.88" class="ps03 ps11"/>
+<text transform="matrix(1 0 0 -1 42.8 709.22)"><tspan xml:space="preserve" x="0,6.759,11.736,14.184,18.693,22.824,26.208,29.403,31.851,34.767,39.276,41.346,46.323,48.771,52.902,56.286,58.734,62.865,66.06" y="-0" class="ps07 ps11 ps24">University diaries </tspan>
+<tspan x="68.13,76.95,78.975,80.955,83.115,90.063,92.223,94.671,98.433" y="-0" class="ps07 ps11 ps25">&#xD1; limited</tspan>
+<tspan x="-8.5104,-4.0014,0.5076,7.4556,11.776,15.538,18.355,20.38,24.889,27.148,29.173,33.493,35.653,39.037,41.854,44.014,47.776,50.314,52.339,58.819,60.979,63.427,67.936,69.961,72.499,74.947,78.331,80.59,82.849,84.874,86.854,89.014,91.552,94,96.16,100.67" y="10.8" class="ps07 ps11 ps25">number of diaries with staff listing</tspan>
+<tspan x="-8.5104,-5.1264,-0.6174,3.7026,5.7276,9.3906,12.775,14.755,18.517,23.026,27.346,30.73,33.547,35.572,40.081,42.34,44.365,51.313,55.075,58.837,61.285,63.445,67.954,71.995,74.533,76.558,78.817,83.326,86.143,88.168,91.831,96.34,99.157,101.97,105.74,110.24" y="21.6" class="ps07 ps11 ps25">and calendar of meetings for current</tspan>
+<tspan x="-8.5104,-5.1264,-1.4634,1.9206,6.2406,10.003,16.951,19.111,22.774,24.799,28.84,32.602,35.986,38.803,40.828,43.087,47.596,50.413,52.438,54.976,58.36,60.34,64.102,66.262,72.922,77.152,79.312,83.542,87.772,89.932,91.957,97.87,101.63,103.61" y="32.4" class="ps07 ps11 ps25">academic year for sale.&#xA3;4.95. Tel:</tspan>
+<tspan x="-8.5104,-4.2804,-0.0504,4.1796,8.4096,12.64,14.8,16.825,19.642,24.151,28.66,35.608,37.633,42.421,46.651,48.811,50.836,56.749,59.566,63.328,67.837,70.285,72.31,77.845,82.354,84.514,86.494,90.814,92.974,97.483,101.52" y="43.2" class="ps07 ps11 ps25">15741, room L5, Trent Building.</tspan>
+<tspan x="-4.996e-15,6.48,10.71,14.94,19.917,28.08,36.243,41.22,46.197,50.328,53.244,55.692,60.669,65.646,67.716,71.847,76.356,80.487,82.935,85.194,89.325,94.302,96.561" y="54" class="ps07 ps11 ps24">Accommodation available</tspan>
+<tspan x="102.73" y="54" class="ps07 ps11 ps26">&#xD1;</tspan>
+<tspan x="-8.5104,-4.2804,0.2286,4.7376,9.0576,13.657,16.474,18.634,20.659,22.819,27.328,29.353,35.734,39.118,41.098,45.229,48.991,51.808,54.256,58.765,63.274,65.434,67.459,71.689,75.919,77.944,84.892,87.052,91.561,94.099,96.124,98.383,101.2,105.71" y="64.8" class="ps07 ps11 ps25">Sun&#xD0;Fri in Calverton, 20 mins from</tspan>
+<tspan x="125.36,131.74,133.9,136.35,140.39,142.55,144.57,150.96,155.46,162.41,166.73,169.55,171.71,174.25,178.01,180.55,182.57,185.11,187.56,192.07,196.39,200.43,202.45,206.77,210.54,214.86,217.67,222.18,226.69,233.64,235.66,237.82" y="-0" class="ps07 ps11 ps25">City. Comprises study bedroom in</tspan>
+<tspan x="125.36,129.68,133.44,135.89,139.27,142.94,147.45,151.21,155.53,157.55,162.06,166.57,171.08,173.62,177.38,179.4,185.88,188.04,190.49,195,197.03,199.56,204.07,207.46,210.27,214.04,218.36,220.38,224.89,227.43,231.19,233.22,237.72" y="10.8" class="ps07 ps11 ps25">detached house with shared use of</tspan>
+<tspan x="125.36,129.68,133.06,135.51,140.02,142.84,147.35,151.86,158.8,160.96,162.99,167.31,169.47,171.92,175.58,180.09,183.85,188.36,190.52,192.54,194.52,199.03,203.54,208.05,212.09,215.85,217.88,221.64,224.09,227.75,229.91,231.94,236.17,240.68,242.84" y="21.6" class="ps07 ps11 ps25">bathroom, kitchen, lounge etc. Suit</tspan>
+<tspan x="125.36,129.68,132.5,137.01,139.26,143.03,145.56,148.1,150.26,154.77,159.28,162.66,164.64,166.67,170.99,174.75,177.57,180.11,184.62,189.12,191.15,195.66,198.48,200.5,207.45,210.83,213.28,217.79,220.61,224.37,228.31,233.2,237.71" y="32.4" class="ps07 ps11 ps25">professional person or mature/PhD</tspan>
+<tspan x="125.36,127.9,130.35,134.85,139.17,142.94,147.45,149.89,152.05,154.08,159.99,163.75,166.57,173.52,176.06,178.08,182.59,186.35,190.39,194.9,197.35,199.51,202.89,207.21,209.19,212.96,215.12,217.14,223.05,226.82,228.8" y="43.2" class="ps07 ps11 ps25">student. Terms negotiable. Tel:</tspan>
+<tspan x="125.36,129.59,133.82,138.05,142.28,144.3,148.53,152.76,156.99,159.02,163.25,167.48,171.71,175.94,177.96,184.44,188.21,191.97,196.29,200.05,204.56,208.88,211.42,213.44,217.95,220.77,222.79,227.02,231.25,235.48" y="54" class="ps07 ps11 ps25">0115 965 3222 weekends or 0181</tspan>
+<tspan x="125.36,129.59,133.82,138.05,140.07,144.3,148.53,152.76,156.99,159.02,165.5,169.26,173.02,177.34,181.66,185.05,189.09,191.11,194.88,199.01,202.77,207.28,209.44,213.95,217.99,220.53" y="64.8" class="ps07 ps11 ps25">205 9815 weekday evenings.</tspan>
+</text>
+<path d="M212.82 45.57 L381.01 45.57 L381.01 -0.42 L212.82 -0.42 ZM265.5 644.42" class="ps04 ps11 ps25"/>
+<text transform="matrix(1 0 0 -1 292.5 20.6)"><tspan x="0,4.41" y="-0" class="ps02 ps11 ps26">15</tspan>
+</text>
+<path d="M33.29 236.5 L291 236.5 L291 47.3 L33.29 47.3 ZM301.32 20.6" class="ps02 ps11 ps26"/>
+<text transform="matrix(1 0 0 -1 105.69 202.27)"><tspan x="0,36,49.14,70.884,92.628" y="-0" class="ps04 ps11 ps27">WILLS</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 55.97 175.2)"><tspan x="0" y="-0" class="ps04 ps11 ps28">&#xA5;</tspan>
+<tspan x="12.124,22.036,29.33,36.624,41.286,44.716,48.356,55.65,59.878,63.966,68.628,75.922,81.9,85.988,89.628,96.922,104.22,108.44,111.87,115.96,121.51,128.51,134.64" y="-0" class="ps04 ps11 ps28">Your instructions taken</tspan>
+<tspan x="22.68" y="17.319" class="ps04 ps11 ps28">&#xA5;</tspan>
+<tspan x="34.314,44.954,50.498,57.064,60.494,67.494,70.924,79.24,85.946,92.078,99.372,103.01,110.31,116.87,120.3,127.3,130.73,144.73,150.86,157,164,170.13,177.42" y="17.319" class="ps04 ps11 ps28">Day &#xD0; Evening &#xD0; Weekend</tspan>
+<tspan x="45.72" y="34.119" class="ps04 ps11 ps28">&#xA5;</tspan>
+<tspan x="56.696,61.358,68.652,72.082,78.648,85.942,93.236,97.898,101.33,108.62,115.92,127,133.14,136.57,143.86,148.52,151.95,159.25,163.04,166.83,170.47,176.45" y="34.119" class="ps04 ps11 ps28">In your home or office</tspan>
+<tspan x="68.03" y="50.919" class="ps04 ps11 ps28">&#xA5;</tspan>
+<tspan x="79.916,86.776,90.416,101.5,108.5,111.86,118.43,121.86,128.86,136.15,143.45,150.74,156.87" y="50.919" class="ps04 ps11 ps28">Simply phone:</tspan>
+<tspan x="2.38,12.152,20.174,28.196,31.696,44.674,51.38,59.402,67.424,71.358,75.152,83.174,90.468,94.556,101.42,104.92,114.69,123.73,131.75,139.48,142.98,155.96,164.42,169.53,179.89,184.84,192.86,196.95,204.97" y="76.52" class="ps04 ps11 ps29">Bob Manojlovic BEng MLIA(dip)</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 76.75 83.9)"><tspan x="0,7.447,10.428,13.409,16.269,18.909,21.769,26.125,29.337,34.155,39.655,42.35,45.562,51.293,53.988,57.2,62.931,67.749,70.444,75.834,81.565,86.262,89.122,93.94,97.152,102.31,105.01,110.74,113.72,116.41,127.41,130.27,132.91,135.55,138.25,149.25,152.91,155.77,158.98,163.8,167.46" y="-0" class="ps04 ps11 ps210">Affiliated to the Society of Will Writers</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 104.11 59.35)"><tspan x="0,12.051,19.5,26.949,30.745,34.268,40.495,44.564,47.814,54.314,60.814,67.314,73.814,77.064,83.564,90.064,96.564,103.06,109.56" y="-0" class="ps04 ps11 ps211">Mobile: 0850 573892</tspan>
+</text>
+<path d="M303.34 722.3 L427.9 722.3 L427.9 440.1 L303.34 440.1 ZM220.18 59.35" class="ps08 ps11 ps211"/>
+<text transform="matrix(1 0 0 -1 319.97 702.84)"><tspan x="0,15.42,26.88,32.72,43.14,52.72,60.64,68.14,73.98,80.86" y="-0" class="ps02 ps11 ps212">University</tspan>
+<tspan x="24.07,38.87,44.29,55.75" y="24" class="ps02 ps11 ps212">Club</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 337.18 665.54)"><tspan x="0,2.718,10.971,14.913,22.041,26.541,30.483,33.48,36.198,38.403,43.092,47.781,49.941,54.162" y="-0" class="ps02 ps11 ps26">(Members only)</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 317.22 579.83)"><tspan x="0,8.88,15.636,20.388,23.892,28.392,32.52,43.644,49.392,53.892,56.892,60.144,67.02,73.896,79.776,86.532,92.28" y="-0" class="ps02 ps11 ps213">Christmas lunches</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 331.74 563.05)"><tspan x="0,2.061,4.5,8.064,14.157,16.452,21.042,25.542,30.132,34.722,37.017,43.857,46.953,49.392,52.488,58.581,62.235,65.331" y="-0" class="ps02 ps11 ps214">from 8&#xD0;23 December</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 324.38 546.24)"><tspan x="0,4.9,7.35,11.62,16.83,22.04,25.37,28.39,32.77,35.79,38.24,45.64,48.24,51.16,56.37,58.82,63.09,68.3,71.01,73.72,78.1" y="-0" class="ps02 ps11 ps215">3 courses with coffee</tspan>
+<tspan x="12.02,15.98,21.19,26.19,28.64,36.56,39.16,44.37,48.64,53.02,55.47,60.47,63.07,67.45" y="12" class="ps02 ps11 ps215">and mince pies</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 349.74 511.43)"><tspan x="0,9.996,15.996,19.752,25.752" y="-0" class="ps02 ps11 ps213">&#xA3;9.85</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 317.48 487.57)"><tspan x="0,7.4,13.03,16.99,19.91,23.66,27.1,36.37,41.16,44.91,47.41,53.14,57.93,61.89,65.33,68.25,73.04,76.79,79.29,84.08,86.79,90.54" y="-0" class="ps02 ps11 ps216">Christmas parties also</tspan>
+<tspan x="28.92,33.71,38.92,43.71,46.63,49.34,54.13,59.86,62.57" y="12" class="ps02 ps11 ps216">available</tspan>
+</text>
+<text transform="matrix(1 0 0 -1 314.84 461.25)"><tspan x="0,5.067,7.227,11.169,14.733,17.451,21.393,23.598,27.441,32.13,36.819,39.447,43.011,46.854,49.482,51.687,56.655,58.995,62.649,64.854,67.293,71.982,74.979,77.184,79.623,84.312,87.309,89.937,94.626,98.568" y="-0" class="ps02 ps11 ps26">Please contact Liz for further</tspan>
+<tspan x="5.1597,7.4997,12.189,14.628,19.317,22.314,29.442,33.006,35.634,37.974,42.663,47.352,49.557,54.246,58.935,61.14,65.082,69.492,72.12,74.325,78.735,83.145,87.555,91.965" y="10.8" class="ps02 ps11 ps26">information on ext 15950</tspan>
+</text>
+<path d="M303.09 722.55 L428.15 722.55 L428.15 439.85 L303.09 439.85 ZM411.23 450.45" class="ps03 ps10 ps26"/>
+<path d="M351 650.8 L382.81 650.8 L382.81 610.6 L351 610.6 Z" class="ps08 ps10 ps26"/>
+<g id="q20" class="ps08 ps10 ps26">
+<g id="xfrm21" transform="matrix(23.9947 0 0 34.1082 354.95 613.8417)">
+<defs>
+  <mask id="inlmsk1" maskUnits="userSpaceOnUse" x="0" y="0" width="1" height="1">
+<image width="1" height="1" preserveAspectRatio="none" image-rendering="optimizeSpeed" xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAGQAAACPCAAAAAApCiHJAAAACXBIWXMAAAAAAAAAAACdYiYyAAACXklEQVRoge2a2Y7DIAxFyyj//8uMZtSFGC/XC63a4peqic0hgM1iLpdPkQZp9bgpqskiPJgfuDoJObiH/1XHWyMAERtHk67WikBCBBN0ULWcdJZznBQqpM+Y4/GuTCbMz/1FpZDSUn4i1+z85inOuCHVkPzAYwNkWelXublNpkCujGYpJECd/K+FPArriyHX8qaYXw1hQ309hOEsgVDMIo/fUXhDNmRDNuRLIYXbUBnionhr9OQ+qT3FECCwLaInLyTKOr8JG1OcYitNGuSBvfyaSphM5lpo+xNM6PJQP5HIw6TTlTqI0l0vDpB0HPLSkZW6CIFPQAHKGVK8geAhi2RDNmRDNuTtIYuCsPolZeuwD+2TDclAykb0U77k5AtI1SPO8/I+eV/Iqvg49COKCPT83QT/DD8lkhCIHhYs644RslZedxEDE2XjrkOG/BqIYK8SEBnzg4OuymmTgkF5QNr5QEHB/J09kKGvU2imE/EcbnpQKTOEfyZCkP7nhjDUBBNSaV/WT6opvDMWUwSPr6VIYcVJ0ceKGLt8FH1EygHyRvE1GUtRojAeAC0KskxNUwzvZl+LUKlW2KSVHMoGpCcdpo9ziB7YL3ycZmvFGduQ0xTThKt7PKaRX3MqHNTMtqNa8AqyCVd4EPGvhVPppoVJQPd2Lpk4W5zR/AgxWsg5dQUg4h26Oki/58LSFHluoLEgQUFM0xQsO5akwPmxDAY0y1FQqxQFNspQcJsExWMSHmQuiyjFZxCkOPVjFG+lQt3vPcBh1mmByxum0G/pdhGBUc8ud6sh8OJ7y7fLL9Zkg/lTkIDBAAAAAElFTkSuQmCC"/>
+</mask></defs>
+<rect x="0" y="0" width="1" height="1" transform="matrix(1 0 0 -1 0 1)" stroke="none" fill="#000000" mask="url(#inlmsk1)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="q22" class="">
+<g id="xfrm23" transform="matrix(1 0 0 1 153.5 276.5)">
+<clipPath id="clp20" clip-rule="nonzero">
+<rect x="0" y="0" width="288" height="288"/>
+</clipPath>
+<g id="frm24" clip-path="url(#clp20)">
+<path d="M85 19.175 L90.075 23.8 L109.75 54.425 L108.55 29.3 C108.4 25.825 105.42 23.15 101.95 23.3 L97.75 23.5 L95.475 19.95 C93.6 17.025 89.675 16.175 86.75 18.05 L84.95 19.2M109.67 54.425 L115.12 43.9 C116.75 40.775 115.52 36.95 112.42 35.375 L112.17 35.275 L109.7 54.475M79.1 74.125 L104.25 72.9 C107.77 72.725 110.42 69.775 110.27 66.275 L110.1 62.125 L113.65 59.85 C116.57 57.975 117.42 54.025 115.55 51.1 L114.4 49.325 L109.75 54.4 L79.15 74.05M70.925 21.375 L90.125 23.85 L79.6 18.4 C76.475 16.775 72.65 18 71.05 21.125 L70.95 21.35M56.8 62.525 L57.05 62.65 L59.525 43.45 L90.125 23.775 L64.975 25 C61.45 25.175 58.8 28.125 58.95 31.625 L59.125 35.8 L55.6 38.05 C52.675 39.925 51.8 43.875 53.675 46.8 L54.825 48.575 L59.475 43.5 L54.025 54.025 C52.4 57.15 53.625 60.975 56.725 62.55M79.075 74.075 L89.625 79.525 C92.7 81.1 96.55 79.925 98.15 76.8 L98.25 76.55 L79.05 74.1M67.2 74.65 L71.4 74.475 L73.65 78 C75.55 80.925 79.475 81.775 82.4 79.9 L84.2 78.75 L79.1 74.125 L59.45 43.525 L60.625 68.625 C60.775 72.1 63.75 74.8 67.25 74.625M103.42 112.25M128.65 93.375 C130.4 96.125 131.2 99.25 131.53 103.6 L124.15 108.32 L119.52 101.12 C116.7 96.65 116.35 94.525 120.57 91.825 C124.45 89.325 126.6 90.125 128.67 93.35M103.45 112.2 C107.77 118.9 113.77 123.42 121.95 118.17 L142.33 105.1 L138.72 99.5 L136.07 100.95 C135.85 96.15 134.97 92.175 132.67 88.6 C129.47 83.625 124.4 80.725 117.05 85.425 C109.45 90.325 110.45 96.15 114.92 103.35 C117.42 107.32 118.02 108.17 119.85 111.02 L118.2 112.1 C113.97 114.8 111.27 113.12 108.52 108.82 C106.6 105.85 104.67 101.67 103.15 97.825 L97.975 101.12 C99.425 104.65 101.27 108.8 103.45 112.17M126.55 148.17M151.65 129.72 C155.2 135.25 153.17 138.65 145.75 143.43 C138.3 148.2 134.38 148.65 130.83 143.1 C129.33 140.75 128.63 138.53 128.25 133.03 L143.63 123.15 C148.47 125.77 150.2 127.35 151.7 129.67M126.62 148.13 C132.43 157.17 139.97 155.83 149.67 149.57 C159.4 143.33 163.85 137 158 127.92 C155.88 124.62 153.43 122.55 148.57 119.92 L162.13 111.22 L158.27 105.2 L117.02 131.7 L120.47 137.07 L123.2 135.75 C123.55 141.5 124.4 144.67 126.6 148.07M154.72 180.63 C152.83 177.65 151.83 173.93 151.17 166.22 L172.75 152.38 L168.9 146.35 L138.8 165.67 L142.3 171.1 L145.72 169.4 C146.38 176.33 147.38 180.47 149.57 183.9 L154.72 180.6M171.5 216.45 L198.57 180.93 C201.33 177.38 201.65 172.75 199.1 168.77 L197.03 165.55 L192.15 168.7 L193.7 171.1 C195.05 173.2 194.77 175.27 193.33 177.17 L189.4 182.13 L153 187.72 L157.15 194.2 L183.22 189.95 L167.38 210.13 L171.45 216.45M187.1 240.35 L192.25 237.05 C189.9 234.65 187.4 231.65 185.72 229.03 C182.47 223.97 183.5 222.43 185.57 221.03 C187.77 219.63 188.7 220 193.25 223.93 C198.65 228.53 202.88 232.72 209.57 228.4 C216.53 223.95 215.43 217.38 210.85 210.25 C208.77 207.03 206.25 204.13 203.2 201.1 L198 204.43 C200.95 207.33 203.5 210.2 205.55 213.4 C208.27 217.65 208.57 220.17 205.55 222.1 C203 223.75 201.77 222.65 197.3 218.93 C190.55 213.3 187.67 211.1 181.9 214.8 C176.3 218.4 174.65 223.25 180.35 232.13 C182.47 235.45 185.13 238.4 187.05 240.45M207.7 245.53 L216.8 259.72 C213.05 262.27 208.53 264.52 204.27 257.9 C201.17 253.07 202.17 249.65 207.7 245.53M222.88 264.4 C223.7 263.82 224.05 263.5 225.07 262.77 L212.15 242.63 C218.77 238.77 222.13 239.45 225.95 245.4 C228.27 249 230.25 253.63 230.63 257.6 L235.72 254.33 C235.43 250.47 233.6 245.83 230.93 241.65 C224 230.88 216.3 231.13 206.3 237.55 C196.27 244 192.63 251.1 199.2 261.35 C207.15 273.7 216.25 269.18 222.88 264.4M40.875 39.35M145 143.1" class="ps09 ps12"/>
+</g>
+</g>
+</g>
+</g>
+</svg>

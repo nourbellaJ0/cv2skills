@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">
+	<fields>
+		<field name="c1-1">
+			<value>Yes</value>
+		</field>
+		<field name="c1-2">
+			<value>Yes</value>
+		</field>
+		<field name="c1-3">
+			<value>Off</value>
+		</field>
+		<field name="f1-1">
+			<value>John Smith</value>
+		</field>
+		<field name="f1-2">
+			<value>123</value>
+		</field>
+		<field name="f1-3">
+			<value>45</value>
+		</field>
+		<field name="f1-4">
+			<value>7777</value>
+		</field>
+		<field name="f1-5">
+			<value>John </value>
+		</field>
+		<field name="f1-6">
+			<value>345</value>
+		</field>
+		<field name="f1-7">
+			<value>34</value>
+		</field>
+		<field name="f1-8">
+			<value>4545</value>
+		</field>
+		<field name="f1-9">
+			<value>Zoe</value>
+		</field>
+		<field name="f1-10">
+			<value>454</value>
+		</field>
+		<field name="f1-11">
+			<value>45</value>
+		</field>
+		<field name="f1-12">
+			<value>4543</value>
+		</field>
+		<field name="f1-13">
+			<value>None</value>
+		</field>
+		<field name="f1-14">
+			<value>34-4234 65th St Viova USA</value>
+		</field>
+		<field name="f1-15">
+			<value>232</value>
+		</field>
+		<field name="f1-16">
+			<value>234 Oak Bay St.</value>
+		</field>
+		<field name="f1-17">
+			<value>34</value>
+		</field>
+		<field name="f1-18">
+			<value>11 Peach St.</value>
+		</field>
+		<field name="f1-19">
+			<value>1</value>
+		</field>
+		<field name="c1-4">
+			<value>Off</value>
+		</field>
+		<field name="c1-5">
+			<value>Yes</value>
+		</field>
+		<field name="c1-6">
+			<value>Yes</value>
+		</field>
+		<field name="f1-20">
+			<value>Rockford Ruby</value>
+		</field>
+		<field name="f1-21">
+			<value>43</value>
+		</field>
+		<field name="f1-22">
+			<value>3243243</value>
+		</field>
+		<field name="f1-23" />
+		<field name="f1-24">
+			<value>55</value>
+		</field>
+		<field name="f1-25" />
+		<field name="f1-26">
+			<value>34324</value>
+		</field>
+		<field name="f1-27" />
+		<field name="f1-28">
+			<value>55</value>
+		</field>
+		<field name="f1-29">
+			<value>423</value>
+		</field>
+		<field name="f1-30">
+			<value>324-3524</value>
+		</field>
+		<field name="f1-31" />
+	</fields>
+	<annots>
+		<underline color="#00FF00" creationdate="D:20120716081554-07'00'" flags="print" date="D:20120716081554-07'00'" name="114155d4-8b1a-4b52-876f-287774cbb1ce" page="0" coords="64.312,762.592,112.113,762.592,64.312,732.717,112.113,732.717" rect="55.4031,730.849,121.022,764.459" subject="Underline" title="achu">
+			<popup flags="print,nozoom,norotate" name="6b54b7e089ed35ef-b07b1c67c768a0c1" open="no" page="0" rect="612,642.592,792,762.592" />
+		</underline>
+		<highlight color="#FFFF00" creationdate="D:20120716081604-07'00'" flags="print" date="D:20120716081604-07'00'" name="5832b9ad-dc51-40bc-92dc-ed58314e2914" page="0" coords="240.109,759.096,367.378,759.096,240.109,741.41,367.378,741.41" rect="235.388,740.858,372.099,759.649" subject="Highlight" title="achu">
+			<popup flags="print,nozoom,norotate" name="6b54b7e289ed35f1-b07b1c65c768a0bf" open="no" page="0" rect="612,639.096,792,759.096" />
+			<apref blend-mode="multiply" y="759.649" x="235.388" gennum="0" objnum="124" />
+		</highlight>
+		<circle color="#FF0000" creationdate="D:20120716081712-07'00'" flags="print" date="D:20120716081712-07'00'" name="25e35882-1372-4585-b046-e4dd3121f127" page="0" fringe="0.5,0.5,0.5,0.5" rect="489.81,726.007,562.498,743.823" subject="Oval" title="achu">
+			<popup flags="print,nozoom,norotate" name="6b54b7e489ed35f3-b07b1c63c768a0bd" open="no" page="0" rect="612,623.323,792,743.323" />
+		</circle>
+		<strikeout color="#FF0000" creationdate="D:20120716081734-07'00'" flags="print" date="D:20120716081734-07'00'" name="42dfcd32-6087-45df-be4d-097a43c93161" page="0" coords="347.168,632.442,362.117,632.442,347.168,621.992,362.117,621.992" rect="344.052,621.339,365.234,633.095" subject="Cross-Out" title="achu">
+			<popup flags="print,nozoom,norotate" name="6b54b7e689ed35f5-b07b1c61c768a0bb" open="no" page="0" rect="612,512.442,792,632.442" />
+		</strikeout>
+		<freetext TextColor="#FF0000" color="#FFFFFF" callout="538.987,178.228,536.774,156.946,536.774,144.946" creationdate="D:20120716081803-07'00'" flags="print" IT="FreeTextCallout" head="OpenArrow" date="D:20120716081827-07'00'" name="a676f968-80ce-484b-8d52-c0ecacd56182" page="0" fringe="0.5,0.5,0.5,33.7817" rect="482.274,128.436,568.25,178.728" subject="Callout" title="achu">
+			<defaultstyle>color:#FF0000;font:Helvetica 12pt;text-align:left;</defaultstyle>
+			<contents-richtext><body xmlns="http://www.w3.org/1999/xhtml" xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:APIVersion="Acrobat:10.1.3" xfa:spec="2.0.2" style="font-size:12.0pt;text-align:left;color:#FF0000;font-weight:normal;font-style:normal;font-family:Helvetica,sans-serif;font-stretch:normal"><p dir="ltr"><span style="font-family:Helvetica">Required</span></p></body></contents-richtext>
+			<defaultappearance>1 0 0 rg /Helv 12 Tf</defaultappearance>
+			<apref y="178.728" x="482.274" gennum="0" objnum="129" />
+		</freetext>
+	</annots>
+	<pages>
+		<defmtx matrix="1.333333,0.000000,0.000000,-1.333333,0.000000,1056.000000" />
+	</pages>
+	<f href="../form1_filled_with_annots.pdf"></f>
+	<pdf-info import-version="4" version="2" xmlns="http://www.pdftron.com/pdfinfo">
+		<ffield name="c1-1" type="Btn">
+			<font size="9" name="ZapfDingbats">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="c1-2" type="Btn">
+			<font size="9" name="ZapfDingbats">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="c1-3" type="Btn">
+			<font size="9" name="ZapfDingbats">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-1" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="3" name="f1-2" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="2" name="f1-3" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="4" name="f1-4" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-5" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="3" name="f1-6" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="2" name="f1-7" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="4" name="f1-8" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-9" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="3" name="f1-10" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="2" name="f1-11" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="4" name="f1-12" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-13" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield flags="Multiline" name="f1-14" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-15" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield flags="Multiline" name="f1-16" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-17" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield flags="Multiline" name="f1-18" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-19" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="c1-4" type="Btn">
+			<font size="9" name="ZapfDingbats">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="c1-5" type="Btn">
+			<font size="9" name="ZapfDingbats">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="c1-6" type="Btn">
+			<font size="9" name="ZapfDingbats">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-20" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="2" name="f1-21" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="7" name="f1-22" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield flags="Multiline" name="f1-23" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-24" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield flags="Multiline" name="f1-25" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-26" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield flags="Multiline" name="f1-27" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-28" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield max-len="3" name="f1-29" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-30" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<ffield name="f1-31" type="Tx">
+			<font size="9" name="Helvetica-Bold">
+				<fill-color b="160" />
+			</font>
+		</ffield>
+		<widget name="6b54b7bb89ed35ca-b07b1c8cc768a0e6" appearance="Yes" page="1" field="c1-1">
+			<rect y2="680.167" x2="63.3329" y1="671.001" x1="54.9997" />
+			<appearances>
+				<aappearance name="Off" />
+				<aappearance name="Yes" />
+			</appearances>
+			<apref appearance-state="Yes" y="680.167" x="54.9997" gennum="0" objnum="84" />
+			<apref appearance-state="Off" annotation-state="Down" y="680.167" x="54.9997" gennum="0" objnum="84" />
+			<apref appearance-state="Yes" annotation-state="Down" y="680.167" x="54.9997" gennum="0" objnum="84" />
+			<captions Normal="4" />
+		</widget>
+		<widget name="6b54b7bc89ed35cb-b07b1c8bc768a0e5" appearance="Yes" page="1" field="c1-2">
+			<rect y2="656.001" x2="452.497" y1="647.668" x1="443.331" />
+			<appearances>
+				<aappearance name="Off" />
+				<aappearance name="Yes" />
+			</appearances>
+			<apref appearance-state="Yes" y="656.001" x="443.331" gennum="0" objnum="85" />
+			<apref appearance-state="Off" annotation-state="Down" y="656.001" x="443.331" gennum="0" objnum="85" />
+			<apref appearance-state="Yes" annotation-state="Down" y="656.001" x="443.331" gennum="0" objnum="85" />
+			<captions Normal="4" />
+		</widget>
+		<widget name="6b54b7bd89ed35cc-b07b1c8ac768a0e4" appearance="Off" page="1" field="c1-3">
+			<rect y2="631.834" x2="63.3329" y1="623.501" x1="54.9997" />
+			<appearances>
+				<aappearance name="Off" />
+				<aappearance name="Yes" />
+			</appearances>
+			<apref appearance-state="Off" y="631.834" x="54.9997" gennum="0" objnum="86" />
+			<apref appearance-state="Yes" y="631.834" x="54.9997" gennum="0" objnum="86" />
+			<apref appearance-state="Off" annotation-state="Down" y="631.834" x="54.9997" gennum="0" objnum="86" />
+			<apref appearance-state="Yes" annotation-state="Down" y="631.834" x="54.9997" gennum="0" objnum="86" />
+			<captions Normal="4" />
+		</widget>
+		<widget name="6b54b7be89ed35cd-b07b1c89c768a0e3" page="1" field="f1-1">
+			<rect y2="606.834" x2="334.998" y1="589.335" x1="153.332" />
+		</widget>
+		<widget quadding="Right-justified" name="6b54b7bf89ed35ce-b07b1c88c768a0e2" page="1" field="f1-2">
+			<rect y2="608.501" x2="471.664" y1="589.335" x1="444.164" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7c089ed35cf-b07b1c87c768a0e1" page="1" field="f1-3">
+			<rect y2="608.501" x2="514.997" y1="589.335" x1="474.164" />
+		</widget>
+		<widget name="6b54b7c189ed35d0-b07b1c86c768a0e0" page="1" field="f1-4">
+			<rect y2="608.501" x2="566.663" y1="589.335" x1="517.497" />
+		</widget>
+		<widget name="6b54b7c289ed35d1-b07b1c85c768a0df" page="1" field="f1-5">
+			<rect y2="573.501" x2="428.331" y1="552.668" x1="60.833" />
+		</widget>
+		<widget quadding="Right-justified" name="6b54b7c389ed35d2-b07b1c84c768a0de" page="1" field="f1-6">
+			<rect y2="570.168" x2="471.664" y1="552.668" x1="444.164" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7c489ed35d3-b07b1c83c768a0dd" page="1" field="f1-7">
+			<rect y2="570.168" x2="514.997" y1="552.668" x1="474.164" />
+		</widget>
+		<widget name="6b54b7c589ed35d4-b07b1c82c768a0dc" page="1" field="f1-8">
+			<rect y2="570.168" x2="566.663" y1="552.668" x1="517.497" />
+		</widget>
+		<widget name="6b54b7c689ed35d5-b07b1c81c768a0db" page="1" field="f1-9">
+			<rect y2="536.835" x2="428.331" y1="516.835" x1="60.833" />
+		</widget>
+		<widget quadding="Right-justified" name="6b54b7c789ed35d6-b07b1c80c768a0da" page="1" field="f1-10">
+			<rect y2="535.168" x2="471.664" y1="516.835" x1="445.831" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7c889ed35d7-b07b1c7fc768a0d9" page="1" field="f1-11">
+			<rect y2="535.168" x2="514.997" y1="516.835" x1="474.164" />
+		</widget>
+		<widget name="6b54b7c989ed35d8-b07b1c7ec768a0d8" page="1" field="f1-12">
+			<rect y2="535.168" x2="566.663" y1="516.835" x1="517.497" />
+		</widget>
+		<widget name="6b54b7ca89ed35d9-b07b1c7dc768a0d7" page="1" field="f1-13">
+			<rect y2="503.502" x2="566.663" y1="481.002" x1="61.6663" />
+		</widget>
+		<widget name="6b54b7cb89ed35da-b07b1c7cc768a0d6" page="1" field="f1-14">
+			<rect y2="468.502" x2="514.997" y1="445.169" x1="61.6663" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7cc89ed35db-b07b1c7bc768a0d5" page="1" field="f1-15">
+			<rect y2="469.335" x2="565.83" y1="445.169" x1="517.497" />
+		</widget>
+		<widget name="6b54b7cd89ed35dc-b07b1c7ac768a0d4" page="1" field="f1-16">
+			<rect y2="432.669" x2="514.997" y1="409.336" x1="61.6663" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7ce89ed35dd-b07b1c79c768a0d3" page="1" field="f1-17">
+			<rect y2="433.502" x2="565.83" y1="409.336" x1="517.497" />
+		</widget>
+		<widget name="6b54b7cf89ed35de-b07b1c78c768a0d2" page="1" field="f1-18">
+			<rect y2="396.836" x2="514.997" y1="372.669" x1="60.833" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7d089ed35df-b07b1c77c768a0d1" page="1" field="f1-19">
+			<rect y2="396.002" x2="564.997" y1="372.669" x1="517.497" />
+		</widget>
+		<widget name="6b54b7d189ed35e0-b07b1c76c768a0d0" appearance="Off" page="1" field="c1-4">
+			<rect y2="344.336" x2="63.3329" y1="335.169" x1="54.9997" />
+			<appearances>
+				<aappearance name="Off" />
+				<aappearance name="Yes" />
+			</appearances>
+			<apref appearance-state="Off" y="344.336" x="54.9997" gennum="0" objnum="106" />
+			<apref appearance-state="Yes" y="344.336" x="54.9997" gennum="0" objnum="106" />
+			<apref appearance-state="Off" annotation-state="Down" y="344.336" x="54.9997" gennum="0" objnum="106" />
+			<apref appearance-state="Yes" annotation-state="Down" y="344.336" x="54.9997" gennum="0" objnum="106" />
+			<captions Normal="4" />
+		</widget>
+		<widget name="6b54b7d289ed35e1-b07b1c75c768a0cf" appearance="Yes" page="1" field="c1-5">
+			<rect y2="333.503" x2="63.3329" y1="325.169" x1="54.9997" />
+			<appearances>
+				<aappearance name="Off" />
+				<aappearance name="Yes" />
+			</appearances>
+			<apref appearance-state="Yes" y="333.503" x="54.9997" gennum="0" objnum="107" />
+			<apref appearance-state="Off" annotation-state="Down" y="333.503" x="54.9997" gennum="0" objnum="107" />
+			<apref appearance-state="Yes" annotation-state="Down" y="333.503" x="54.9997" gennum="0" objnum="107" />
+			<captions Normal="4" />
+		</widget>
+		<widget name="6b54b7d389ed35e2-b07b1c74c768a0ce" appearance="Yes" page="1" field="c1-6">
+			<rect y2="321.836" x2="63.3329" y1="313.503" x1="54.9997" />
+			<appearances>
+				<aappearance name="Off" />
+				<aappearance name="Yes" />
+			</appearances>
+			<apref appearance-state="Yes" y="321.836" x="54.9997" gennum="0" objnum="108" />
+			<apref appearance-state="Off" annotation-state="Down" y="321.836" x="54.9997" gennum="0" objnum="108" />
+			<apref appearance-state="Yes" annotation-state="Down" y="321.836" x="54.9997" gennum="0" objnum="108" />
+			<captions Normal="4" />
+		</widget>
+		<widget name="6b54b7d489ed35e3-b07b1c73c768a0cd" page="1" field="f1-20">
+			<rect y2="298.503" x2="428.331" y1="276.836" x1="59.1663" />
+		</widget>
+		<widget quadding="Right-justified" name="6b54b7d589ed35e4-b07b1c72c768a0cc" page="1" field="f1-21">
+			<rect y2="297.67" x2="457.497" y1="276.836" x1="430.831" />
+		</widget>
+		<widget name="6b54b7d689ed35e5-b07b1c71c768a0cb" page="1" field="f1-22">
+			<rect y2="297.67" x2="566.663" y1="276.836" x1="459.997" />
+		</widget>
+		<widget name="6b54b7d789ed35e6-b07b1c70c768a0ca" page="1" field="f1-23">
+			<rect y2="265.17" x2="497.497" y1="241.003" x1="60.833" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7d889ed35e7-b07b1c6fc768a0c9" page="1" field="f1-24">
+			<rect y2="266.003" x2="566.663" y1="241.003" x1="505.83" />
+		</widget>
+		<widget name="6b54b7d989ed35e8-b07b1c6ec768a0c8" page="1" field="f1-25">
+			<rect y2="228.503" x2="497.497" y1="205.17" x1="61.6663" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7da89ed35e9-b07b1c6dc768a0c7" page="1" field="f1-26">
+			<rect y2="230.17" x2="564.997" y1="205.17" x1="505.83" />
+		</widget>
+		<widget name="6b54b7db89ed35ea-b07b1c6cc768a0c6" page="1" field="f1-27">
+			<rect y2="192.67" x2="497.497" y1="169.337" x1="62.4996" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7dc89ed35eb-b07b1c6bc768a0c5" page="1" field="f1-28">
+			<rect y2="195.17" x2="564.997" y1="169.337" x1="506.664" />
+		</widget>
+		<widget quadding="Centered" name="6b54b7dd89ed35ec-b07b1c6ac768a0c4" page="1" field="f1-29">
+			<rect y2="146.837" x2="311.665" y1="132.671" x1="287.498" />
+		</widget>
+		<widget name="6b54b7de89ed35ed-b07b1c69c768a0c3" page="1" field="f1-30">
+			<rect y2="146.837" x2="408.331" y1="132.671" x1="314.998" />
+		</widget>
+		<widget name="6b54b7df89ed35ee-b07b1c68c768a0c2" page="1" field="f1-31">
+			<rect y2="89.3376" x2="566.663" y1="72.6711" x1="354.998" />
+		</widget>
+	</pdf-info>
+</xfdf>

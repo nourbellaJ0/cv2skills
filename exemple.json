@@ -1,0 +1,64 @@
+{
+  "Informations Personnelles": {
+    "Nom": "Bellaaj",
+    "Prenom": "Hayet",
+    "Adresse": "12 rue des Lilas, Tunis",
+    "Téléphone": "+216 20 000 000",
+    "Email": "hayet.bellaaj@email.com"
+  },
+  "Formation et Certifications": [
+    {
+      "Diplôme/Certification": "Diplôme d'ingénieur en IA",
+      "Établissement": "ESPRIT",
+      "Année": "2024"
+    },
+    {
+      "Diplôme/Certification": "Certification AWS Cloud Practitioner",
+      "Établissement": "Amazon",
+      "Année": "2023"
+    }
+  ],
+  "Langues": [
+    {
+      "Langue": "Français",
+      "Niveau": "C2"
+    },
+    {
+      "Langue": "Anglais",
+      "Niveau": "B2"
+    }
+  ],
+  "Expériences Clés Récentes": [
+    {
+      "Intitulé": "Développement backend Flask",
+      "Entreprise": "Devoteam",
+      "Année": "2024",
+      "Détails": "Implémentation d'une API de traitement de CV avec génération PDF"
+    }
+  ],
+  "Expériences Professionnelles": [
+    {
+      "Poste": "Stagiaire Ingénieur IA",
+      "Entreprise": "Devoteam",
+      "Période": "Fév 2024 - Juin 2024",
+      "Missions": [
+        "Extraction de données depuis des CV",
+        "Classification sémantique via Gemini",
+        "Génération de PDF avec Apryse"
+      ]
+    }
+  ],
+  "Projets Intéressants": [
+    {
+      "Titre": "CV2Skills",
+      "Description": "Une application d’analyse de CV et génération de dossiers de compétences.",
+      "Technologies": ["Python", "Flask", "Gemini API", "Apryse SDK"]
+    }
+  ],
+  "Compétences Techniques": [
+    "Python", "Flask", "HTML/CSS", "Gemini", "Apryse SDK", "Git"
+  ],
+  "Méthodologies": [
+    "Agile", "Scrum", "Kanban"
+  ]
+}
