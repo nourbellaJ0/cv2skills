@@ -6,6 +6,8 @@ import json
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
+from pymongo import MongoClient
+import datetime
 
 from utils.file_detector import detect_format
 from utils.extractor import extract_text, clean_text
@@ -23,11 +25,16 @@ import PyPDF2  # Forcer l'inclusion de PyPDF2
 
 from apryse_sdk import PDFNet, TemplateDocument, PDFDoc, OfficeToPDFOptions, Convert
 
-# Chargement des variables d’environnement
-load_dotenv()
+# 🔗 Connexion à MongoDB Atlas (via .env)
 
+client = MongoClient("mongodb+srv://nourbellaaj:NBkumK0rXzGLPYuX@cluster0.nq7jkzm.mongodb.net/")
+db = client["cv2skills_db"]
+collection = db["cv_documents"]
+
+# Flask init
 app = Flask(__name__)
 CORS(app)
+load_dotenv()
 
 # Configuration API Gemini
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
@@ -211,9 +218,19 @@ Texte du CV :
 
         try:
             structured_json = json.loads(generated_text)
+
+            # 💾 Insertion dans MongoDB
+            collection.insert_one({
+                "uploaded_at": datetime.datetime.utcnow(),
+                "filename": file.filename,
+                "structured_data": structured_json
+            })
+
             return jsonify({"success": True, "data": structured_json})
+
         except json.JSONDecodeError:
             return jsonify({"success": False, "error": "Le résultat n'est pas un JSON valide", "data": DEFAULT_STRUCTURE})
+
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur Gemini : {str(e)}"}), 500
 
@@ -261,6 +278,11 @@ def generate_pdf_apryse_template():
 @app.route("/generate-pdf", methods=["POST"])
 def generate_pdf_alias():
     return generate_pdf_apryse_template()
+
+@app.route("/documents", methods=["GET"])
+def list_documents():
+    docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1})
+    return jsonify(list(docs))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
