@@ -156,7 +156,9 @@ def upload_cv():
         return jsonify({"success": False, "error": "Aucun fichier reçu."}), 400
 
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file.filename.rsplit('.', 1)[-1]}") as tmp:
+        filename = file.filename or "uploaded"
+        ext = filename.rsplit('.', 1)[-1] if '.' in filename else "tmp"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{ext}") as tmp:
             file.save(tmp.name)
             file_format = detect_format(tmp.name)
             print(f"Format MIME détecté : {file_format}")
@@ -219,14 +221,8 @@ Texte du CV :
         try:
             structured_json = json.loads(generated_text)
 
-            # 💾 Insertion dans MongoDB
-            collection.insert_one({
-                "uploaded_at": datetime.datetime.utcnow(),
-                "filename": file.filename,
-                "structured_data": structured_json
-            })
-
-            return jsonify({"success": True, "data": structured_json})
+            # Ne pas insérer dans la base ici !
+            return jsonify({"success": True, "data": structured_json, "filename": filename})
 
         except json.JSONDecodeError:
             return jsonify({"success": False, "error": "Le résultat n'est pas un JSON valide", "data": DEFAULT_STRUCTURE})
@@ -283,6 +279,24 @@ def generate_pdf_alias():
 def list_documents():
     docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1})
     return jsonify(list(docs))
+
+@app.route("/add-to-db", methods=["POST"])
+def add_to_db():
+    data = request.get_json()
+    if not data:
+        return jsonify({"success": False, "error": "Aucune donnée JSON reçue."}), 400
+    structured_json = data.get("structured_data")
+    filename = data.get("filename", "uploaded")
+
+    if not structured_json:
+        return jsonify({"success": False, "error": "Aucune donnée structurée reçue."}), 400
+
+    collection.insert_one({
+        "uploaded_at": datetime.datetime.utcnow(),
+        "filename": filename,
+        "structured_data": structured_json
+    })
+    return jsonify({"success": True, "message": "Document ajouté à la base de données."})
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

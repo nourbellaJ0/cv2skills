@@ -59,8 +59,12 @@
   </form>
 
   <pre id="output" class="hidden"></pre>
+  <button id="addToDbBtn" style="display:none;">Ajouter à la BD</button>
 
   <script>
+let lastStructuredData = null;
+let lastFilename = null;
+
 document.getElementById("uploadForm").addEventListener("submit", async function (e) {
   e.preventDefault();
   const fileInput = document.getElementById("cvFile");
@@ -88,7 +92,12 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
 
     const json = await response.json();
     const structuredData = json.data;
+    const filename = json.filename;
     output.textContent = JSON.stringify(structuredData, null, 2);
+
+    lastStructuredData = structuredData;
+    lastFilename = filename;
+    document.getElementById('addToDbBtn').style.display = 'inline-block';
 
     // Stocker temporairement dans le localStorage
     const key = 'cv2skills_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -126,6 +135,31 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
 
       output.parentNode.insertBefore(btn, output.nextSibling);
     }
+
+    // Gestion du clic sur "Ajouter à la BD"
+    document.getElementById('addToDbBtn').onclick = function() {
+      if (!lastStructuredData) {
+        alert("Aucune donnée à ajouter.");
+        return;
+      }
+      fetch('/add-to-db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          structured_data: lastStructuredData,
+          filename: lastFilename
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("Document ajouté à la base de données !");
+          document.getElementById('addToDbBtn').style.display = 'none';
+        } else {
+          alert("Erreur : " + data.error);
+        }
+      });
+    };
 
   } catch (error) {
     output.textContent = "❌ Erreur : " + error.message;
