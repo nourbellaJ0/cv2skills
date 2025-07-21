@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV2Skills – Convertisseur de CV</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin: 20px auto;
+    }
+
+    button {
+      background-color: #e63946;
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    pre {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      overflow-x: auto;
+      max-width: 800px;
+      margin: 30px auto;
+      text-align: left;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Convertir mon CV en Dossier de Compétences</h1>
+
+  <form id="uploadForm">
+    <input type="file" id="cvFile" name="cv" accept=".pdf,.doc,.docx,.txt" required />
+    <button type="submit">Analyser mon CV</button>
+  </form>
+
+  <pre id="output" class="hidden"></pre>
+
+  <script>
+document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const fileInput = document.getElementById("cvFile");
+  const output = document.getElementById("output");
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Veuillez sélectionner un fichier.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("cv", file);
+
+  output.classList.remove("hidden");
+  output.textContent = "Analyse en cours...";
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!response.ok) throw new Error("Erreur lors de l'envoi du fichier.");
+
+    const json = await response.json();
+    const structuredData = json.data;
+    output.textContent = JSON.stringify(structuredData, null, 2);
+
+    // Stocker temporairement dans le localStorage
+    const key = 'cv2skills_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    localStorage.setItem(key, JSON.stringify(structuredData));
+    window.cv2skillsTempKey = key;
+
+    // Créer un bouton de téléchargement Apryse
+    if (!document.getElementById('downloadApryseBtn')) {
+      const btn = document.createElement('button');
+      btn.id = 'downloadApryseBtn';
+      btn.textContent = 'Télécharger PDF du CV (Apryse)';
+      btn.style.marginLeft = '20px';
+
+      btn.onclick = async function () {
+        const jsonData = localStorage.getItem(window.cv2skillsTempKey);
+        const formData = new FormData();
+        formData.append("jsonData", jsonData);
+
+        const response = await fetch("http://127.0.0.1:5000/generate-pdf-apryse-template", {
+          method: "POST",
+          body: formData
+        });
+
+        if (!response.ok) {
+          alert("Erreur lors de la génération du PDF Apryse.");
+          return;
+        }
+
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "cv2skills_result_apryse.pdf";
+        link.click();
+      };
+
+      output.parentNode.insertBefore(btn, output.nextSibling);
+    }
+
+  } catch (error) {
+    output.textContent = "❌ Erreur : " + error.message;
+  }
+});
+</script>
+
+
+</body>
+</html>

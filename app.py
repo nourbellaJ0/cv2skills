@@ -14,7 +14,7 @@ import sys
 from apryse_sdk import *
 
 sys.path.append("Samples/LicenseKey/PYTHON")
-from LicenseKey import *
+from Samples.LicenseKey.PYTHON.LicenseKey import *
 
 # Relative path to the folder containing the test files.
 input_path = "Samples/TestFiles/"
