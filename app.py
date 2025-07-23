@@ -103,6 +103,12 @@ DEFAULT_STRUCTURE = {
     ]
 }
 
+def sanitize_technologies(techs):
+    # Transforme ["Python", "Flask"] en [{"item": "Python"}, ...] si besoin
+    if isinstance(techs, list):
+        return [t if isinstance(t, dict) and "item" in t else {"item": t} for t in techs]
+    return []
+
 def sanitize_json(data):
     def is_list_of_dicts_with_keys(lst, required_keys):
         return all(isinstance(item, dict) and all(k in item for k in required_keys) for item in lst)
@@ -144,7 +150,13 @@ def sanitize_json(data):
         "formation_et_certifications": sanitize_value(data.get("formation_et_certifications", []), ["diplome_certification", "etablissement", "annee"]),
         "langues": sanitize_value(data.get("langues", []), ["langue", "niveau"]),
         "competences_techniques": sanitize_value(data.get("competences_techniques", []), ["item"]),
-        "projets_interessants": sanitize_value(data.get("projets_interessants", []), ["titre", "description", "technologies"]),
+        "projets_interessants": [
+            {
+                "titre": item.get("titre", ""),
+                "description": item.get("description", ""),
+                "technologies": sanitize_technologies(item.get("technologies", []))
+            } for item in data.get("projets_interessants", [])
+        ],
         "methodologies": sanitize_value(data.get("methodologies", []), ["item"])
     }
 
