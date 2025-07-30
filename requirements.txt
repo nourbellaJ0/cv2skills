@@ -6,3 +6,5 @@ python-dotenv
 gunicorn
 flask-cors
 pyinstaller
+pymongo
+apryse-sdk

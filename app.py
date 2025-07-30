@@ -15,12 +15,9 @@ from utils.extractor import extract_text, clean_text
 import sys
 from apryse_sdk import *
 
-sys.path.append("Samples/LicenseKey/PYTHON")
-from Samples.LicenseKey.PYTHON.LicenseKey import *
+sys.path.append("PDFNetC6/Samples/LicenseKey/PYTHON")
+from PDFNetC6.Samples.LicenseKey.PYTHON.LicenseKey import *
 
-# Relative path to the folder containing the test files.
-input_path = "Samples/TestFiles/"
-output_path = "Samples/TestFiles/Output/"
 import PyPDF2  # Forcer l'inclusion de PyPDF2
 
 from apryse_sdk import PDFNet, TemplateDocument, PDFDoc, OfficeToPDFOptions, Convert
@@ -163,11 +160,11 @@ def sanitize_json(data):
 
 @app.route("/upload", methods=["POST"])
 def upload_cv():
-    file = request.files.get("cv")
-    if not file:
-        return jsonify({"success": False, "error": "Aucun fichier reçu."}), 400
-
     try:
+        file = request.files.get("cv")
+        if not file:
+            return jsonify({"success": False, "error": "Aucun fichier reçu."}), 400
+
         filename = file.filename or "uploaded"
         ext = filename.rsplit('.', 1)[-1] if '.' in filename else "tmp"
         with tempfile.NamedTemporaryFile(delete=False, suffix=f".{ext}") as tmp:
@@ -181,11 +178,64 @@ def upload_cv():
                     "format_detecté": file_format
                 }), 400
             text = extract_text(tmp.name)
+
+        if not text.strip():
+            return jsonify({"success": False, "error": "Le texte extrait est vide ou illisible."}), 400
+
+        cleaned_text = clean_text(text)
+
+        prompt = f"""Voici un texte brut extrait d’un CV. Analyse-le et convertis-le en un JSON structuré qui suit **strictement** le format suivant, inspiré d’un modèle graphique de CV :
+
+-{{{{
+  "informations_personnelles": {{{{
+    "nom": "", "prenom": "", "adresse": "", "telephone": "", "email": ""
+  }}}},
+  "experiences_cles_recentes": [{{{{ "intitule": "", "entreprise": "", "annee": "", "details": "" }}}}],
+  "experiences_professionnelles": [{{{{ "poste": "", "entreprise": "", "periode": "", "missions": [{{{{"item": ""}}}}] }}}}],
+  "formation_et_certifications": [{{{{ "diplome_certification": "", "etablissement": "", "annee": "" }}}}],
+  "langues": [{{{{ "langue": "", "niveau": "" }}}}],
+  "competences_techniques": [{{{{ "item": "" }}}}],
+  "projets_interessants": [{{{{ "titre": "", "description": "", "technologies": [{{{{"item": ""}}}}] }}}}],
+  "methodologies": [{{{{ "item": "" }}}}]
+}}}}
+
+Texte du CV :
+{cleaned_text}
+"""
+
+        payload = {
+            "contents": [
+                {
+                    "parts": [{"text": prompt}]
+                }
+            ]
+        }
+
+        response = requests.post(
+            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
+            headers={"Content-Type": "application/json"},
+            json=payload
+        )
+        response.raise_for_status()
+        generated_text = response.json()['candidates'][0]['content']['parts'][0]['text'].strip()
+
+        if generated_text.startswith("```json"):
+            generated_text = generated_text[len("```json"):].strip()
+        if generated_text.endswith("```"):
+            generated_text = generated_text[:-3].strip()
+
+        try:
+            structured_json = json.loads(generated_text)
+
+            # Ne pas insérer dans la base ici !
+            return jsonify({"success": True, "data": structured_json, "filename": filename})
+
+        except json.JSONDecodeError:
+            return jsonify({"success": False, "error": "Le résultat n'est pas un JSON valide", "data": DEFAULT_STRUCTURE})
+
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur d'extraction : {str(e)}"}), 500
-
-    if not text.strip():
-        return jsonify({"success": False, "error": "Le texte extrait est vide ou illisible."}), 400
+        if generated_text.startswith("```json"):
 
     cleaned_text = clean_text(text)
 
@@ -242,9 +292,15 @@ Texte du CV :
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur Gemini : {str(e)}"}), 500
 
-@app.route("/")
-def home():
-    return "<h2>API en ligne. Utilisez /upload pour envoyer un CV.</h2>"
+from flask import send_from_directory
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('static', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static_file(filename):
+    return send_from_directory('static', filename)
 
 # Initialisation Apryse
 PDFNet.Initialize("demo:1752070393300:61bdca4403000000007b61d7537372fcfa3852aafb5c2f90c5c1d0335e")
@@ -289,8 +345,15 @@ def generate_pdf_alias():
 
 @app.route("/documents", methods=["GET"])
 def list_documents():
-    docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1})
-    return jsonify(list(docs))
+    try:
+        docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1})
+        docs_list = []
+        for doc in docs:
+            doc['uploaded_at'] = doc['uploaded_at'].isoformat() if 'uploaded_at' in doc else None
+            docs_list.append(doc)
+        return jsonify(docs_list)
+    except Exception as e:
+        return jsonify({"success": False, "error": f"Erreur lors de la récupération des documents : {str(e)}"}), 500
 
 @app.route("/add-to-db", methods=["POST"])
 def add_to_db():

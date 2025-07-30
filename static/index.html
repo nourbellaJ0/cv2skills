@@ -513,7 +513,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
   originalPreview.src = originalURL;
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/upload", {
+    const response = await fetch("/upload", {
       method: "POST",
       body: formData
     });
@@ -551,7 +551,7 @@ downloadApryseBtn.onclick = async function () {
   originalIframe.style.display = 'none';
   convertedIframe.style.display = 'none';
 
-  const response = await fetch("http://127.0.0.1:5000/generate-pdf-apryse-template", {
+  const response = await fetch("/generate-pdf-apryse-template", {
     method: "POST",
     body: formData
   });
