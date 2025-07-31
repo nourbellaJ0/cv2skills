@@ -235,62 +235,6 @@ Texte du CV :
 
     except Exception as e:
         return jsonify({"success": False, "error": f"Erreur d'extraction : {str(e)}"}), 500
-        if generated_text.startswith("```json"):
-
-    cleaned_text = clean_text(text)
-
-    prompt = f"""Voici un texte brut extrait d’un CV. Analyse-le et convertis-le en un JSON structuré qui suit **strictement** le format suivant, inspiré d’un modèle graphique de CV :
-
--{{{{
-  "informations_personnelles": {{{{
-    "nom": "", "prenom": "", "adresse": "", "telephone": "", "email": ""
-  }}}},
-  "experiences_cles_recentes": [{{{{ "intitule": "", "entreprise": "", "annee": "", "details": "" }}}}],
-  "experiences_professionnelles": [{{{{ "poste": "", "entreprise": "", "periode": "", "missions": [{{{{"item": ""}}}}] }}}}],
-  "formation_et_certifications": [{{{{ "diplome_certification": "", "etablissement": "", "annee": "" }}}}],
-  "langues": [{{{{ "langue": "", "niveau": "" }}}}],
-  "competences_techniques": [{{{{ "item": "" }}}}],
-  "projets_interessants": [{{{{ "titre": "", "description": "", "technologies": [{{{{"item": ""}}}}] }}}}],
-  "methodologies": [{{{{ "item": "" }}}}]
-}}}}
-
-Texte du CV :
-{cleaned_text}
-"""
-
-    payload = {
-        "contents": [
-            {
-                "parts": [{"text": prompt}]
-            }
-        ]
-    }
-
-    try:
-        response = requests.post(
-            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
-            headers={"Content-Type": "application/json"},
-            json=payload
-        )
-        response.raise_for_status()
-        generated_text = response.json()['candidates'][0]['content']['parts'][0]['text'].strip()
-
-        if generated_text.startswith("```json"):
-            generated_text = generated_text[len("```json"):].strip()
-        if generated_text.endswith("```"):
-            generated_text = generated_text[:-3].strip()
-
-        try:
-            structured_json = json.loads(generated_text)
-
-            # Ne pas insérer dans la base ici !
-            return jsonify({"success": True, "data": structured_json, "filename": filename})
-
-        except json.JSONDecodeError:
-            return jsonify({"success": False, "error": "Le résultat n'est pas un JSON valide", "data": DEFAULT_STRUCTURE})
-
-    except Exception as e:
-        return jsonify({"success": False, "error": f"Erreur Gemini : {str(e)}"}), 500
 
 from flask import send_from_directory
 
