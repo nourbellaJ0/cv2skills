@@ -319,25 +319,7 @@
       justify-content: center;
       margin: 18px 0 10px 0;
     }
-    .loader {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      min-height: 120px;
-    }
-    .loader .spinner {
-      border: 4px solid #eee;
-      border-top: 4px solid var(--main-red);
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
+
   </style>
 </head>
 <body>
@@ -378,11 +360,13 @@
           <div class="text"><span id="fileLabelText">Cliquez ou glissez un fichier ici</span></div>
           <input type="file" id="cvFile" name="cv" accept=".pdf,.doc,.docx,.txt" required />
         </label>
-        <div class="btn-group">
-          <button type="submit" class="button"><span class="button-content">Analyser mon CV</span></button>
-          <button id="addToDbBtn" class="button" style="display:none;"><span class="button-content">Ajouter à la base</span></button>
-          <button id="downloadApryseBtn" class="button" style="display:none;"><span class="button-content">Télécharger PDF du CV (Apryse)</span></button>
-        </div>
+                 <div class="btn-group">
+           <button type="submit" class="button"><span class="button-content">Analyser mon CV</span></button>
+         </div>
+         <div class="btn-group" id="actionButtons" style="display:none;">
+           <button id="addToDbBtn" class="button"><span class="button-content">Ajouter à la base</span></button>
+           <button id="downloadApryseBtn" class="button"><span class="button-content">Télécharger PDF du CV (Apryse)</span></button>
+         </div>
         <div id="dbMsg" style="margin-top:10px;"></div>
       </form>
       <div class="file-preview" id="filePreview"></div>
@@ -391,13 +375,11 @@
           <h3>📎 CV original</h3>
           <iframe id="originalPreview" src=""></iframe>
         </div>
-        <div class="pdf-box" id="pdfBoxConverted">
-          <h3>📄 CV converti (PDF)</h3>
-          <div id="convertedLoader" class="loader" style="display:none;"><div class="spinner"></div></div>
-          <iframe id="convertedPreview" src="" style="display:none;"></iframe>
-        </div>
-      </div>
-      <div id="dualLoader" class="loader" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:2;"><div class="spinner"></div></div>
+                 <div class="pdf-box" id="pdfBoxConverted">
+           <h3>📄 CV converti (PDF)</h3>
+           <iframe id="convertedPreview" src="" style="display:none;"></iframe>
+         </div>
+       </div>
     </div>
   </div>
 
@@ -465,10 +447,10 @@ const filePreview = document.getElementById('filePreview');
 const dualPreviewContainer = document.getElementById('dualPreviewContainer');
 const originalPreview = document.getElementById('originalPreview');
 const convertedPreviewIframe = document.getElementById('convertedPreview');
+const actionButtons = document.getElementById('actionButtons');
 let lastConvertedPdfUrl = null;
 
-addToDbBtn.style.display = 'none';
-downloadApryseBtn.style.display = 'none';
+
 dualPreviewContainer.classList.add('hidden');
 originalPreview.src = '';
 convertedPreviewIframe.src = '';
@@ -500,17 +482,18 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
   const formData = new FormData();
   formData.append("cv", file);
 
+  // Reset UI
   filePreview.innerHTML = renderFilePreview(file);
-  addToDbBtn.style.display = 'none';
-  downloadApryseBtn.style.display = 'none';
   dualPreviewContainer.classList.add('hidden');
   originalPreview.src = '';
   convertedPreviewIframe.src = '';
 
-  // Preview du fichier original (PDF/Word/TXT)
+  // Prévisualisation du fichier original
   const originalBlob = new Blob([file], { type: file.type });
   const originalURL = URL.createObjectURL(originalBlob);
   originalPreview.src = originalURL;
+
+
 
   try {
     const response = await fetch("/upload", {
@@ -525,16 +508,18 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
     const filename = json.filename;
     lastStructuredData = structuredData;
     lastFilename = filename;
-    addToDbBtn.style.display = 'inline-block';
-    downloadApryseBtn.style.display = 'inline-block';
 
-    // Stocker temporairement dans le localStorage
+    // Afficher les boutons et preview
+    actionButtons.style.display = 'flex';
+    dualPreviewContainer.classList.remove('hidden');
+
+    // Enregistre temporairement
     const key = 'cv2skills_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     localStorage.setItem(key, JSON.stringify(structuredData));
     window.cv2skillsTempKey = key;
 
   } catch (error) {
-    // Affiche l'erreur dans la preview section si besoin
+    alert("Erreur pendant l'analyse du fichier.");
   }
 });
 
@@ -543,38 +528,34 @@ downloadApryseBtn.onclick = async function () {
   const formData = new FormData();
   formData.append("jsonData", jsonData);
 
-  // Affiche le loader global et masque les deux iframes
-  const dualLoader = document.getElementById('dualLoader');
-  const originalIframe = document.getElementById('originalPreview');
-  const convertedIframe = document.getElementById('convertedPreview');
-  dualLoader.style.display = 'flex';
-  originalIframe.style.display = 'none';
-  convertedIframe.style.display = 'none';
+  try {
+    const response = await fetch("/generate-pdf-apryse-template", {
+      method: "POST",
+      body: formData
+    });
 
-  const response = await fetch("/generate-pdf-apryse-template", {
-    method: "POST",
-    body: formData
-  });
+    if (!response.ok) {
+      alert("Erreur lors de la génération du PDF Apryse.");
+      return;
+    }
 
-  if (!response.ok) {
-    dualLoader.style.display = 'none';
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    lastConvertedPdfUrl = url;
+    const convertedIframe = document.getElementById('convertedPreview');
+    convertedIframe.src = url;
+    convertedIframe.style.display = 'block';
+
+
+
+    // Téléchargement automatique du PDF généré
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'cv2skills_result_apryse.pdf';
+    link.click();
+  } catch (error) {
     alert("Erreur lors de la génération du PDF Apryse.");
-    return;
   }
-
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
-  lastConvertedPdfUrl = url;
-  convertedIframe.src = url;
-  dualLoader.style.display = 'none';
-  originalIframe.style.display = '';
-  convertedIframe.style.display = 'block';
-  dualPreviewContainer.classList.remove('hidden');
-  // Téléchargement automatique du PDF généré
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'cv2skills_result_apryse.pdf';
-  link.click();
 };
 
 const dbMsg = document.getElementById('dbMsg');
@@ -597,7 +578,6 @@ addToDbBtn.onclick = function() {
     if (data.success) {
       dbMsg.textContent = "Document ajouté à la base de données !";
       dbMsg.style.color = "#43aa8b";
-      addToDbBtn.style.display = 'none';
     } else {
       dbMsg.textContent = "Erreur : " + data.error;
       dbMsg.style.color = "#e63946";
