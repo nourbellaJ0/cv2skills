@@ -15,11 +15,15 @@
       --main-light: #fff;
       --shadow: 0 2px 8px rgba(44,62,80,0.06);
     }
+    body {
+      background: url('wallpaper.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
     html, body {
       margin: 0;
       padding: 0;
       font-family: 'Montserrat', 'Segoe UI', sans-serif;
-      background: var(--main-bg);
+      /* background: var(--main-bg); */
       min-height: 100vh;
       color: var(--main-dark);
     }
@@ -104,6 +108,30 @@
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: none; }
     }
+    /* Loader pour dual preview */
+    .dual-loader {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.956);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      border-radius: 18px;
+    }
+    .spinner {
+      border: 5px solid #eee;
+      border-top: 5px solid #e63946;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
     /* ACCUEIL */
     .home-container {
       max-width: 700px;
@@ -161,30 +189,14 @@
     .container {
       max-width: 650px;
       margin: 40px auto 0 auto;
-      background: #fff;
+      background: rgba(255,255,255,0.92);
       border-radius: 18px;
-      padding: 36px 32px 32px 32px;
+      padding: 32px 18px 24px 18px;
       text-align: center;
-      border: 1px solid #f0f0f0;
+      border: none;
+      box-shadow: none;
     }
-    .file-preview {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      background: #f3f3f3;
-      border-radius: 10px;
-      padding: 12px 18px;
-      font-size: 1.08rem;
-      color: #333;
-      border: 1px solid #ececec;
-      margin-bottom: 0;
-      gap: 12px;
-    }
-    .file-icon {
-      font-size: 1.7em;
-      margin-right: 8px;
-      color: var(--main-red);
-    }
+    /* Suppression de .file-preview et .file-icon pour épurer */
     .dual-preview-container {
       display: flex;
       justify-content: space-between;
@@ -196,16 +208,21 @@
     .pdf-box {
       flex: 1;
       min-width: 300px;
+      background: transparent;
+      border: 1.5px dashed #e63946;
+      border-radius: 10px;
+      box-shadow: none;
     }
     .pdf-box h3 {
       text-align: center;
       margin-bottom: 10px;
       color: var(--main-dark);
+      font-weight: 600;
     }
     .pdf-box iframe {
       width: 100%;
       height: 480px;
-      border: 1px solid #ccc;
+      border: none;
       border-radius: 8px;
       background: #fff;
       transition: box-shadow 0.2s;
@@ -220,7 +237,7 @@
       .pdf-box iframe { height: 320px; }
     }
     /* Animations fade-in sur les boutons et previews */
-    button, .file-preview, .dual-preview-container, .container, .home-container {
+    button, .dual-preview-container, .container, .home-container {
       transition: box-shadow 0.2s, background 0.2s, opacity 0.5s;
     }
     .custum-file-upload {
@@ -232,17 +249,17 @@
       cursor: pointer;
       align-items: center;
       justify-content: center;
-      border: 2px dashed #e8e8e8;
-      background-color: #aaaaaa;
+      border: 1.5px dashed #e63946;
+      background-color: rgba(255,255,255,0.7);
       padding: 1.5rem;
       border-radius: 10px;
-      box-shadow: 0px 48px 35px -48px #e8e8e8;
+      box-shadow: none;
       margin: 0 auto 18px auto;
       transition: border-color 0.2s, background 0.2s;
     }
     .custum-file-upload:hover {
       border-color: var(--main-red);
-      background: #6c6c6c;
+      background: #6c6c6c7e;
     }
     .custum-file-upload .icon {
       display: flex;
@@ -365,18 +382,22 @@
          </div>
          <div class="btn-group" id="actionButtons" style="display:none;">
            <button id="addToDbBtn" class="button"><span class="button-content">Ajouter à la base</span></button>
-           <button id="downloadApryseBtn" class="button"><span class="button-content">Télécharger PDF du CV (Apryse)</span></button>
+           <button id="downloadApryseBtn" class="button"><span class="button-content">Télécharger le CV </span></button>
          </div>
         <div id="dbMsg" style="margin-top:10px;"></div>
       </form>
-      <div class="file-preview" id="filePreview"></div>
+      <!-- file preview supprimé pour un design plus épuré -->
       <div id="dualPreviewContainer" class="dual-preview-container hidden" style="position:relative;">
+        <div id="dualLoader" class="dual-loader" style="display:none;">
+          <div class="spinner"></div>
+          <div style="margin-top:10px;color:#e63946;">Analyse en cours...</div>
+        </div>
         <div class="pdf-box" id="pdfBoxOriginal">
-          <h3>📎 CV original</h3>
+          <h3> CV original</h3>
           <iframe id="originalPreview" src=""></iframe>
         </div>
                  <div class="pdf-box" id="pdfBoxConverted">
-           <h3>📄 CV converti (PDF)</h3>
+           <h3> CV converti</h3>
            <iframe id="convertedPreview" src="" style="display:none;"></iframe>
          </div>
        </div>
@@ -386,7 +407,7 @@
   <!-- PAGE BASE DE DONNÉES -->
   <div class="page" id="dbPage">
     <div class="container">
-      <h2 style="color:#457b9d;margin-bottom:18px;">Documents en base</h2>
+      <h2 style="color:#e63946;margin-bottom:18px;">Documents en base</h2>
       <div id="dbList" style="text-align:left;"></div>
       <button onclick="loadDbList()" style="margin-top:18px;">Rafraîchir</button>
     </div>
@@ -443,7 +464,6 @@ let lastFile = null;
 
 const addToDbBtn = document.getElementById('addToDbBtn');
 const downloadApryseBtn = document.getElementById('downloadApryseBtn');
-const filePreview = document.getElementById('filePreview');
 const dualPreviewContainer = document.getElementById('dualPreviewContainer');
 const originalPreview = document.getElementById('originalPreview');
 const convertedPreviewIframe = document.getElementById('convertedPreview');
@@ -462,10 +482,44 @@ function getFileIcon(type) {
   return '📁';
 }
 
-function renderFilePreview(file) {
-  if (!file) return '';
-  const icon = getFileIcon(file.type || file.name);
-  return `<span class="file-icon">${icon}</span><span class="file-name">${file.name}</span>`;
+
+
+function showDualLoader(show = true) {
+  const loader = document.getElementById('dualLoader');
+  if (show) {
+    loader.style.display = 'flex';
+    dualPreviewContainer.classList.remove('hidden');
+  } else {
+    loader.style.display = 'none';
+  }
+}
+
+// Affiche automatiquement la preview du PDF converti
+async function generateAndShowConvertedPdf() {
+  const jsonData = localStorage.getItem(window.cv2skillsTempKey);
+  const formData = new FormData();
+  formData.append("jsonData", jsonData);
+
+  try {
+    const response = await fetch("/generate-pdf-apryse-template", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!response.ok) {
+      // Ne pas alerter ici, le bouton de téléchargement le fera si besoin
+      return;
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    lastConvertedPdfUrl = url;
+    const convertedIframe = document.getElementById('convertedPreview');
+    convertedIframe.src = url;
+    convertedIframe.style.display = 'block';
+  } catch (error) {
+    // Silencieux ici, le bouton de téléchargement gère l'erreur utilisateur
+  }
 }
 
 document.getElementById("uploadForm").addEventListener("submit", async function (e) {
@@ -483,7 +537,6 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
   formData.append("cv", file);
 
   // Reset UI
-  filePreview.innerHTML = renderFilePreview(file);
   dualPreviewContainer.classList.add('hidden');
   originalPreview.src = '';
   convertedPreviewIframe.src = '';
@@ -493,7 +546,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
   const originalURL = URL.createObjectURL(originalBlob);
   originalPreview.src = originalURL;
 
-
+  showDualLoader(true); // Affiche le loader
 
   try {
     const response = await fetch("/upload", {
@@ -518,8 +571,13 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
     localStorage.setItem(key, JSON.stringify(structuredData));
     window.cv2skillsTempKey = key;
 
+    // Affiche automatiquement la preview du PDF converti
+    generateAndShowConvertedPdf();
+
   } catch (error) {
     alert("Erreur pendant l'analyse du fichier.");
+  } finally {
+    showDualLoader(false); // Cache le loader à la fin, succès ou erreur
   }
 });
 
