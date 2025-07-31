@@ -301,21 +301,25 @@ def list_documents():
 
 @app.route("/add-to-db", methods=["POST"])
 def add_to_db():
-    data = request.get_json()
-    if not data:
-        return jsonify({"success": False, "error": "Aucune donnée JSON reçue."}), 400
-    structured_json = data.get("structured_data")
-    filename = data.get("filename", "uploaded")
-
-    if not structured_json:
-        return jsonify({"success": False, "error": "Aucune donnée structurée reçue."}), 400
-
-    collection.insert_one({
-        "uploaded_at": datetime.datetime.utcnow(),
-        "filename": filename,
-        "structured_data": structured_json
-    })
-    return jsonify({"success": True, "message": "Document ajouté à la base de données."})
+    try:
+        # Use force=True, silent=True to avoid exceptions if JSON is missing or invalid
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            return jsonify({"success": False, "error": "Aucune donnée JSON reçue."}), 400
+        structured_json = data.get("structured_data")
+        filename = data.get("filename", "uploaded")
+        if not structured_json:
+            return jsonify({"success": False, "error": "Aucune donnée structurée reçue."}), 400
+        collection.insert_one({
+            "uploaded_at": datetime.datetime.utcnow(),
+            "filename": filename,
+            "structured_data": structured_json
+        })
+        return jsonify({"success": True, "message": "Document ajouté à la base de données."})
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())  # Log the full traceback for debugging
+        return jsonify({"success": False, "error": f"Erreur serveur : {str(e)}"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
