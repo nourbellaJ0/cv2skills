@@ -8,3 +8,4 @@ flask-cors
 pyinstaller
 pymongo
 apryse-sdk
+groq

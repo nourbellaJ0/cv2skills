@@ -336,6 +336,37 @@
       justify-content: center;
       margin: 18px 0 10px 0;
     }
+    .input {
+      border: none;
+      outline: none;
+      border-radius: 15px;
+      padding: 1em;
+      background-color: #ccc;
+      box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
+      transition: 300ms ease-in-out;
+      width: 100%;
+      max-width: 300px;
+      font-family: 'Montserrat', 'Segoe UI', sans-serif;
+      font-size: 1rem;
+    }
+
+    .input:focus {
+      background-color: white;
+      transform: scale(1.05);
+      box-shadow: 13px 13px 100px #969696,
+                 -13px -13px 100px #ffffff;
+    }
+    
+    body.dark .input {
+      background-color: #7f7f7f;
+      color: #f3f3f3;
+    }
+    
+    body.dark .input:focus {
+      background-color: #333;
+      box-shadow: 13px 13px 100px #1a1a1a,
+                 -13px -13px 100px #8a8a8a;
+    }
 /* --- SWITCH THEME UIVERSE.IO --- */
 .theme-switch {
   --toggle-size: 20px;
@@ -553,6 +584,72 @@ body.dark .nav-link.active, body.dark .nav-link:hover {
 body.dark .dual-loader {
   background: rgba(30,32,40,0.92);
 }
+.db-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 12px;
+  justify-content: flex-start;
+}
+.db-card {
+  background: rgba(255,255,255,0.93);
+  border: 1.5px dashed #e63946;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+  padding: 18px 22px 14px 22px;
+  min-width: 220px;
+  max-width: 320px;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.db-card-title {
+  font-weight: 700;
+  color: #e63946;
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+.db-card-date {
+  color: #888;
+  font-size: 0.97em;
+}
+.db-download-btn {
+  margin-top: 12px;
+  background: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.db-download-btn:hover {
+  background: #457b9d;
+}
+body.dark .db-download-btn {
+  background: #eca0a0;
+  color: #23243a;
+}
+body.dark .db-download-btn:hover {
+  background: #457b9d;
+  color: #fff;
+}
+body.dark .db-card {
+  background: rgba(30,32,40,0.93);
+  border-color: #eca0a0;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.13);
+}
+body.dark .db-card-title {
+  color: #eca0a0;
+}
+body.dark .db-card-date {
+  color: #bbb;
+}
   </style>
 </head>
 <body>
@@ -611,6 +708,9 @@ body.dark .dual-loader {
           <div class="text"><span id="fileLabelText">Cliquez ou glissez un fichier ici</span></div>
           <input type="file" id="cvFile" name="cv" accept=".pdf,.doc,.docx,.txt" required />
         </label>
+        <div style="margin: 18px 0;">
+          <input type="text" autocomplete="off" name="offreRecherchee" id="offreRecherchee" class="input" placeholder="Offre demandée (ex: Développeur Full Stack)" />
+        </div>
                  <div class="btn-group">
            <button type="submit" class="button"><span class="button-content">Analyser mon CV</span></button>
          </div>
@@ -672,12 +772,53 @@ function loadDbList() {
         dbList.innerHTML = "<span style='color:#e63946;'>Aucun document en base.</span>";
         return;
       }
-      dbList.innerHTML = '<ul style="padding-left:0;">' + data.map(doc =>
-        `<li style="margin-bottom:8px;">
-          <b>${doc.filename}</b>
-          <span style="color:#888;font-size:0.95em;">(${new Date(doc.uploaded_at).toLocaleString()})</span>
-        </li>`
-      ).join('') + '</ul>';
+      dbList.innerHTML = '<div class="db-cards">' + data.map(doc => {
+        const infos = doc.structured_data && doc.structured_data.informations_personnelles
+          ? doc.structured_data.informations_personnelles
+          : {};
+        const fullName = (infos.prenom || '') + ' ' + (infos.nom || '');
+        const displayName = fullName.trim() || doc.filename;
+        const date = doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleString() : '';
+        const jsonData = JSON.stringify(doc.structured_data || {});
+        return `
+          <div class="db-card">
+            <div class="db-card-title">${displayName}</div>
+            <div class="db-card-date">${date}</div>
+            <button class="db-download-btn" data-json='${encodeURIComponent(jsonData)}'>
+              Télécharger PDF
+            </button>
+          </div>
+        `;
+      }).join('') + '</div>';
+      // Ajout des listeners pour les boutons Télécharger
+      document.querySelectorAll('.db-download-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const jsonData = decodeURIComponent(this.getAttribute('data-json'));
+          const formData = new FormData();
+          formData.append('jsonData', jsonData);
+          try {
+            const response = await fetch('/generate-pdf-apryse-template', {
+              method: 'POST',
+              body: formData
+            });
+            if (!response.ok) {
+              alert('Erreur lors de la génération du PDF.');
+              return;
+            }
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'cv2skills_result_apryse.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          } catch (e) {
+            alert('Erreur lors de la génération du PDF.');
+          }
+        });
+      });
     })
     .catch(() => {
       dbList.innerHTML = "<span style='color:#e63946;'>Erreur lors du chargement.</span>";
@@ -710,10 +851,10 @@ originalPreview.src = '';
 convertedPreviewIframe.src = '';
 
 function getFileIcon(type) {
-  if (type.includes('pdf')) return '📄';
-  if (type.includes('word')) return '📝';
-  if (type.includes('text')) return '📃';
-  return '📁';
+  if (type.includes('pdf')) return '[PDF]';
+  if (type.includes('word')) return '[WORD]';
+  if (type.includes('text')) return '[TEXT]';
+  return '[FILE]';
 }
 
 
@@ -731,8 +872,14 @@ function showDualLoader(show = true) {
 // Affiche automatiquement la preview du PDF converti
 async function generateAndShowConvertedPdf() {
   const jsonData = localStorage.getItem(window.cv2skillsTempKey);
+  console.log("generateAndShowConvertedPdf() called");
+  console.log("Key:", window.cv2skillsTempKey);
+  console.log("jsonData from localStorage:", jsonData?.substring(0, 300));
+  console.log("jsonData length:", jsonData?.length);
+  
   const formData = new FormData();
   formData.append("jsonData", jsonData);
+  console.log("FormData appended with jsonData");
 
   try {
     const response = await fetch("/generate-pdf-apryse-template", {
@@ -741,7 +888,7 @@ async function generateAndShowConvertedPdf() {
     });
 
     if (!response.ok) {
-      // Ne pas alerter ici, le bouton de téléchargement le fera si besoin
+      console.error("PDF generation failed:", response.status);
       return;
     }
 
@@ -751,8 +898,9 @@ async function generateAndShowConvertedPdf() {
     const convertedIframe = document.getElementById('convertedPreview');
     convertedIframe.src = url;
     convertedIframe.style.display = 'block';
+    console.log("PDF preview loaded successfully");
   } catch (error) {
-    // Silencieux ici, le bouton de téléchargement gère l'erreur utilisateur
+    console.error("❌ Error generating PDF:", error);
   }
 }
 
@@ -769,6 +917,13 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
 
   const formData = new FormData();
   formData.append("cv", file);
+  
+  // Ajouter l'offre demandée si elle est renseignée
+  const offreRecherchee = document.getElementById("offreRecherchee").value.trim();
+  if (offreRecherchee) {
+    formData.append("offre", offreRecherchee);
+    console.log("Offre demandee:", offreRecherchee);
+  }
 
   // Reset UI
   dualPreviewContainer.classList.add('hidden');
@@ -793,8 +948,14 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
     const json = await response.json();
     const structuredData = json.data;
     const filename = json.filename;
+    const offreRecherchee = json.offre_recherchee;
     lastStructuredData = structuredData;
     lastFilename = filename;
+
+    console.log("Upload response received:", json);
+    console.log("Structured data from response:", structuredData);
+    console.log("Offre demandee utilisee:", offreRecherchee || "Aucune");
+    console.log("Competences count:", structuredData?.competences_techniques_categories?.length || 0);
 
     // Afficher les boutons et preview
     actionButtons.style.display = 'flex';
@@ -804,6 +965,10 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
     const key = 'cv2skills_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     localStorage.setItem(key, JSON.stringify(structuredData));
     window.cv2skillsTempKey = key;
+
+    console.log("Data stored in localStorage with key:", key);
+    const retrieved = localStorage.getItem(key);
+    console.log("Retrieved from localStorage:", retrieved?.substring(0, 300));
 
     // Affiche automatiquement la preview du PDF converti
     generateAndShowConvertedPdf();

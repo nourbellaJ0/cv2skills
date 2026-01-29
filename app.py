@@ -1,13 +1,13 @@
 import os
 import tempfile
 import mimetypes
-import requests
 import json
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import datetime
+from groq import Groq
 
 from utils.file_detector import detect_format
 from utils.extractor import extract_text, clean_text
@@ -20,7 +20,7 @@ from PDFNetC6.Samples.LicenseKey.PYTHON.LicenseKey import *
 
 import PyPDF2  # Forcer l'inclusion de PyPDF2
 
-from apryse_sdk import PDFNet, TemplateDocument, PDFDoc, OfficeToPDFOptions, Convert
+from apryse_sdk import PDFNet, TemplateDocument, PDFDoc, OfficeToPDFOptions, Convert, SDFDoc
 
 # 🔗 Connexion à MongoDB Atlas (via .env)
 
@@ -33,9 +33,9 @@ app = Flask(__name__)
 CORS(app)
 load_dotenv()
 
-# Configuration API Gemini
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyBwY7vwRKPsC0NggJrMFFmWZDpDp1PLI_Q"
+# Configuration API Groq
+GROQ_API_KEY = os.getenv("GROQ_API_KEY") or "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"
+groq_client = Groq(api_key=GROQ_API_KEY)
 
 SUPPORTED_MIME_TYPES = [
     "application/pdf",
@@ -45,59 +45,19 @@ SUPPORTED_MIME_TYPES = [
 ]
 
 DEFAULT_STRUCTURE = {
+    "competences_techniques_categories": [],
+    "experiences_cles_recentes": [],
+    "experiences_professionnelles": [],
+    "formation_et_certifications": [],
     "informations_personnelles": {
         "nom": "",
         "prenom": "",
-        "adresse": "",
-        "telephone": "",
-        "email": ""
+        "resume": "",
+        "titre": ""
     },
-    "experiences_cles_recentes": [
-        {
-            "intitule": "",
-            "entreprise": "",
-            "annee": "",
-            "details": ""
-        }
-    ],
-    "experiences_professionnelles": [
-        {
-            "poste": "",
-            "entreprise": "",
-            "periode": "",
-            "missions": [
-                { "item": "" }
-            ]
-        }
-    ],
-    "formation_et_certifications": [
-        {
-            "diplome_certification": "",
-            "etablissement": "",
-            "annee": ""
-        }
-    ],
-    "langues": [
-        {
-            "langue": "",
-            "niveau": ""
-        }
-    ],
-    "competences_techniques": [
-        { "item": "" }
-    ],
-    "projets_interessants": [
-        {
-            "titre": "",
-            "description": "",
-            "technologies": [
-                { "item": "" }
-            ]
-        }
-    ],
-    "methodologies": [
-        { "item": "" }
-    ]
+    "langues": [],
+    "methodologies": [],
+    "projets_interessants": []
 }
 
 def sanitize_technologies(techs):
@@ -107,54 +67,104 @@ def sanitize_technologies(techs):
     return []
 
 def sanitize_json(data):
-    def is_list_of_dicts_with_keys(lst, required_keys):
-        return all(isinstance(item, dict) and all(k in item for k in required_keys) for item in lst)
-
-    def sanitize_value(val, expected_keys=None):
+    def sanitize_value(val):
         if isinstance(val, str):
             return val.strip() or "Aucune information"
         elif isinstance(val, list):
-            if expected_keys:
-                return [sanitize_dict(v, expected_keys) if isinstance(v, dict) else sanitize_dict({}, expected_keys) for v in val]
-            else:
-                return [sanitize_value(v) for v in val] or ["Aucune information"]
+            return [sanitize_value(v) for v in val] or []
         elif isinstance(val, dict):
-            return sanitize_dict(val, expected_keys)
+            return {k: sanitize_value(v) for k, v in val.items()}
         return "Aucune information"
 
-    def sanitize_dict(d, expected_keys=None):
-        if expected_keys:
-            return {k: sanitize_value(d.get(k, ""), None) for k in expected_keys}
-        else:
-            return {k: sanitize_value(v) for k, v in d.items()}
+    def normalize_contenu(contenu):
+        """Normalise le champ contenu en array de strings"""
+        if isinstance(contenu, str):
+            return contenu
+        elif isinstance(contenu, list):
+            # Si c'est une liste de dicts avec 'listes' et 'nom', extraire les valeurs
+            if contenu and isinstance(contenu[0], dict):
+                if 'listes' in contenu[0] and 'nom' in contenu[0]:
+                    # Format complexe, extraire les éléments
+                    result = []
+                    for item in contenu:
+                        if 'listes' in item and isinstance(item['listes'], list):
+                            result.extend(item['listes'])
+                    return ", ".join(str(x) for x in result) if result else "Aucune information"
+            # Format simple array
+            return ", ".join(str(x) for x in contenu) if contenu else "Aucune information"
+        return "Aucune information"
+
+    # Forcer le format des listes d'objets pour le template
+    def force_list_of_dicts(lst, keys):
+        result = []
+        for item in lst:
+            if isinstance(item, dict):
+                obj = {}
+                for k in keys:
+                    if k == "technologies":
+                        # S'assurer que technologies est toujours un tableau
+                        techs = item.get(k, [])
+                        if isinstance(techs, str):
+                            obj[k] = [{"item": techs}]
+                        elif isinstance(techs, list):
+                            obj[k] = [{"item": t} if isinstance(t, str) else t for t in techs]
+                        else:
+                            obj[k] = [{"item": "Aucune technologie"}]
+                    elif k == "missions":
+                        # S'assurer que missions est toujours un tableau
+                        missions = item.get(k, [])
+                        if isinstance(missions, str):
+                            obj[k] = [{"item": missions}]
+                        elif isinstance(missions, list):
+                            obj[k] = [{"item": m} if isinstance(m, str) else m for m in missions]
+                        else:
+                            obj[k] = [{"item": "Aucune mission"}]
+                    elif k == "contenu":
+                        # Normaliser le contenu
+                        obj[k] = normalize_contenu(item.get(k, ""))
+                    else:
+                        obj[k] = sanitize_value(item.get(k, ""))
+            elif isinstance(item, str):
+                obj = {k: (item if i == 0 else "") for i, k in enumerate(keys)}
+            else:
+                obj = {k: "" for k in keys}
+            result.append(obj)
+        return result
 
     return {
-        "informations_personnelles": sanitize_dict(data.get("informations_personnelles", {}), ["nom", "prenom", "adresse", "telephone", "email"]),
-        "experiences_cles_recentes": sanitize_value(data.get("experiences_cles_recentes", []), ["intitule", "entreprise", "annee", "details"]),
-        "experiences_professionnelles": [
-            {
-                "poste": item.get("poste", "Aucune information"),
-                "entreprise": item.get("entreprise", "Aucune information"),
-                "periode": item.get("periode", "Aucune information"),
-                "missions": sanitize_value(item.get("missions", []), ["item"])
-            } for item in data.get("experiences_professionnelles", [])
-        ] or [{
-            "poste": "Aucune information",
-            "entreprise": "Aucune information",
-            "periode": "Aucune information",
-            "missions": [{"item": "Aucune mission"}]
-        }],
-        "formation_et_certifications": sanitize_value(data.get("formation_et_certifications", []), ["diplome_certification", "etablissement", "annee"]),
-        "langues": sanitize_value(data.get("langues", []), ["langue", "niveau"]),
-        "competences_techniques": sanitize_value(data.get("competences_techniques", []), ["item"]),
-        "projets_interessants": [
-            {
-                "titre": item.get("titre", ""),
-                "description": item.get("description", ""),
-                "technologies": sanitize_technologies(item.get("technologies", []))
-            } for item in data.get("projets_interessants", [])
-        ],
-        "methodologies": sanitize_value(data.get("methodologies", []), ["item"])
+        "competences_techniques_categories": force_list_of_dicts(
+            data.get("competences_techniques_categories", []),
+            ["titre", "contenu"]
+        ),
+        "experiences_cles_recentes": force_list_of_dicts(
+            data.get("experiences_cles_recentes", []),
+            ["intitule", "entreprise", "duree"]
+        ),
+        "experiences_professionnelles": force_list_of_dicts(
+            data.get("experiences_professionnelles", []),
+            ["poste", "entreprise", "periode", "contexte", "missions", "livrables", "environnement"]
+        ),
+        "formation_et_certifications": force_list_of_dicts(
+            data.get("formation_et_certifications", []),
+            ["diplome_certification", "etablissement", "annee"]
+        ),
+        "informations_personnelles": {
+            "nom": sanitize_value(data.get("informations_personnelles", {}).get("nom", "")),
+            "prenom": sanitize_value(data.get("informations_personnelles", {}).get("prenom", "")),
+            "resume": sanitize_value(data.get("informations_personnelles", {}).get("resume", "")),
+        },
+        "langues": force_list_of_dicts(
+            data.get("langues", []),
+            ["langue", "niveau"]
+        ),
+        "methodologies": force_list_of_dicts(
+            data.get("methodologies", []),
+            ["item"]
+        ),
+        "projets_interessants": force_list_of_dicts(
+            data.get("projets_interessants", []),
+            ["titre", "description", "technologies"]
+        ),
     }
 
 
@@ -166,6 +176,7 @@ def upload_cv():
             return jsonify({"success": False, "error": "Aucun fichier reçu."}), 400
 
         filename = file.filename or "uploaded"
+        offre_recherchee = request.form.get("offre", "").strip()
         ext = filename.rsplit('.', 1)[-1] if '.' in filename else "tmp"
         with tempfile.NamedTemporaryFile(delete=False, suffix=f".{ext}") as tmp:
             file.save(tmp.name)
@@ -184,56 +195,179 @@ def upload_cv():
 
         cleaned_text = clean_text(text)
 
-        prompt = f"""Voici un texte brut extrait d’un CV. Analyse-le et convertis-le en un JSON structuré qui suit **strictement** le format suivant, inspiré d’un modèle graphique de CV :
+        # Adapter le prompt selon l'offre si elle est spécifiée
+        offre_instruction = ""
+        if offre_recherchee:
+            offre_instruction = f"""
 
--{{{{
-  "informations_personnelles": {{{{
-    "nom": "", "prenom": "", "adresse": "", "telephone": "", "email": ""
-  }}}},
-  "experiences_cles_recentes": [{{{{ "intitule": "", "entreprise": "", "annee": "", "details": "" }}}}],
-  "experiences_professionnelles": [{{{{ "poste": "", "entreprise": "", "periode": "", "missions": [{{{{"item": ""}}}}] }}}}],
-  "formation_et_certifications": [{{{{ "diplome_certification": "", "etablissement": "", "annee": "" }}}}],
-  "langues": [{{{{ "langue": "", "niveau": "" }}}}],
-  "competences_techniques": [{{{{ "item": "" }}}}],
-  "projets_interessants": [{{{{ "titre": "", "description": "", "technologies": [{{{{"item": ""}}}}] }}}}],
-  "methodologies": [{{{{ "item": "" }}}}]
-}}}}
+🎯 **ADAPTATION POUR L'OFFRE CIBLE:** {offre_recherchee}
+
+INSTRUCTIONS CRITIQUES:
+1. REFORMULE les expériences professionnelles pour les adapter au poste "{offre_recherchee}"
+2. DÉVELOPPE et ENRICHIS les descriptions des expériences pertinentes pour ce poste
+3. METS EN VALEUR les aspects techniques et contextuels pertinents pour "{offre_recherchee}"
+4. Ajoute des détails sur comment les expériences correspondent au poste
+5. Les expériences NON pertinentes pour "{offre_recherchee}" doivent être réduites au minimum
+
+Exemple: Pour un poste de Data Science, développe les projets ML/IA, reformule les missions autour de l'analyse de données, mets en avant les outils data (Python, SQL, etc.)
+"""
+
+        prompt = f"""Voici un texte brut extrait d'un CV. Analyse-le et convertis-le en un JSON structuré qui suit **strictement** le format suivant :{offre_instruction}
+
+{{
+  "competences_techniques_categories": [
+    {{
+      "titre": "Nom de la catégorie",
+      "contenu": "Liste des compétences de cette catégorie"
+    }}
+  ],
+  "experiences_cles_recentes": [
+    {{
+      "intitule": "Titre du poste",
+      "entreprise": "Nom de l'entreprise",
+      "duree": "Durée ou période"
+    }}
+  ],
+  "experiences_professionnelles": [
+    {{
+      "poste": "Titre du poste",
+      "entreprise": "Nom de l'entreprise",
+      "periode": "Période d'emploi",
+      "contexte": "Contexte du projet/mission",
+      "missions": [
+        {{
+          "item": "Description de la mission"
+        }}
+      ],
+      "livrables": [
+        {{
+          "item": "Description du livrable"
+        }}
+      ],
+      "environnement": "Technologies et outils utilisés"
+    }}
+  ],
+  "formation_et_certifications": [
+    {{
+      "diplome_certification": "Nom du diplôme/certification",
+      "etablissement": "Nom de l'établissement",
+      "annee": "Année d'obtention"
+    }}
+  ],
+  "informations_personnelles": {{
+    "nom": "Nom de famille",
+    "prenom": "Prénom",
+    "resume": "Résumé professionnel"
+  }},
+  "langues": [
+    {{
+      "langue": "Nom de la langue",
+      "niveau": "Niveau de maîtrise"
+    }}
+  ],
+  "methodologies": [
+    {{
+      "item": "Nom de la méthodologie"
+    }}
+  ],
+  "projets_interessants": [
+    {{
+      "titre": "Titre du projet",
+      "description": "Description du projet",
+      "technologies": [
+        {{
+          "item": "Nom de la technologie"
+        }}
+      ]
+    }}
+  ]
+}}
 
 Texte du CV :
 {cleaned_text}
 """
+        
+        # Ajouter un dernier rappel au prompt si une offre est spécifiée
+        if offre_recherchee:
+            reminder = f"⚠️ RAPPEL FINAL: Reformule et enrichis le contenu pour adapter au poste '{offre_recherchee}' - les expériences doivent être différentes et détaillées pour ce poste spécifique!"
+            prompt += "\n\n" + reminder
 
-        payload = {
-            "contents": [
-                {
-                    "parts": [{"text": prompt}]
-                }
-            ]
-        }
+        try:
+            response = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7,
+                max_completion_tokens=8192
+            )
+            print(f"Groq API status: Success")
+            generated_text = response.choices[0].message.content
+            print("Groq full response:", generated_text[:1000])
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return jsonify({"success": False, "error": f"Erreur API Groq: {str(e)}"}), 500
 
-        response = requests.post(
-            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
-            headers={"Content-Type": "application/json"},
-            json=payload
-        )
-        response.raise_for_status()
-        generated_text = response.json()['candidates'][0]['content']['parts'][0]['text'].strip()
+        # Parse/validate Groq response
+        try:
+            if not generated_text:
+                raise ValueError("Empty response from Groq")
+        except Exception as e:
+            print("Impossible de parser la réponse de Groq:", str(e))
+            raise
 
-        if generated_text.startswith("```json"):
-            generated_text = generated_text[len("```json"):].strip()
-        if generated_text.endswith("```"):
-            generated_text = generated_text[:-3].strip()
+        if not isinstance(generated_text, str) or not generated_text.strip():
+            return jsonify({"success": False, "error": "Réponse Groq inattendue: texte manquant"}), 500
+
+        generated_text = generated_text.strip()
+        
+        # Extract JSON from markdown code blocks or find raw JSON
+        # Groq often returns: "Voici... ```json { ... } ```"
+        if "```json" in generated_text:
+            start_idx = generated_text.find("```json") + len("```json")
+            end_idx = generated_text.rfind("```")
+            if end_idx > start_idx:
+                generated_text = generated_text[start_idx:end_idx].strip()
+        else:
+            # Try to find JSON object directly
+            json_start = generated_text.find("{")
+            json_end = generated_text.rfind("}")
+            if json_start >= 0 and json_end > json_start:
+                generated_text = generated_text[json_start:json_end+1].strip()
+        
+        print("📄 Cleaned text ready to parse:", generated_text[:200])
 
         try:
             structured_json = json.loads(generated_text)
 
-            # Ne pas insérer dans la base ici !
-            return jsonify({"success": True, "data": structured_json, "filename": filename})
+            # Contrôle de saisie sur les champs essentiels
+            infos = structured_json.get("informations_personnelles", {})
+            
+            print("Raw Groq data (before sanitize):", json.dumps(structured_json, ensure_ascii=False)[:500])
+            print("Raw competences count:", len(structured_json.get("competences_techniques_categories", [])))
+           
+            # Return RAW data from Groq, don't sanitize yet
+            # Sanitization will happen in PDF generation
+            return jsonify({
+                "success": True, 
+                "data": structured_json,  # Return raw Groq data
+                "filename": filename,
+                "offre_recherchee": offre_recherchee if offre_recherchee else None
+            })
 
-        except json.JSONDecodeError:
-            return jsonify({"success": False, "error": "Le résultat n'est pas un JSON valide", "data": DEFAULT_STRUCTURE})
+        except json.JSONDecodeError as e:
+            print(f"JSON Parse Error: {e}")
+            return jsonify({
+                "success": False, 
+                "error": "Le résultat n'est pas un JSON valide", 
+                "data": DEFAULT_STRUCTURE
+            })
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
+        # For dev: include brief error message in response to aid debugging
         return jsonify({"success": False, "error": f"Erreur d'extraction : {str(e)}"}), 500
 
 from flask import send_from_directory
@@ -253,16 +387,24 @@ PDFNet.Initialize("demo:1752070393300:61bdca4403000000007b61d7537372fcfa3852aafb
 @app.route("/generate-pdf-apryse-template", methods=["POST"])
 def generate_pdf_apryse_template():
     try:
-        print("📩 Requête reçue pour génération Apryse")
+        print("Requete recue pour generation Apryse")
         json_data = request.form.get("jsonData")
         if not json_data:
+            print("ERREUR: Aucune jsonData recue!")
+            print("Available form keys:", list(request.form.keys()))
             return jsonify({"success": False, "error": "Données JSON manquantes"}), 400
 
-        print("📄 jsonData reçu (début):", json_data[:300])
-        data = sanitize_json(json.loads(json_data))
+        print("jsonData recu (debut):", json_data[:500])
+        parsed_json = json.loads(json_data)
+        print("Parsed JSON keys:", list(parsed_json.keys()))
+        print("Raw competences count:", len(parsed_json.get("competences_techniques_categories", [])))
+        
+        # Sanitize ONLY when generating PDF
+        data = sanitize_json(parsed_json)
+        print("After sanitize_json competences count:", len(data.get("competences_techniques_categories", [])))
 
 
-        input_template = os.path.join("template.docx")
+        input_template = os.path.join("template_new.docx")
         if not os.path.exists(input_template):
             return jsonify({"success": False, "error": "Template DOCX introuvable"}), 500
 
@@ -275,11 +417,11 @@ def generate_pdf_apryse_template():
         output_pdf_path = os.path.join("cv2skills_result_apryse.pdf")
         filled_pdf.Save(output_pdf_path, SDFDoc.e_linearized)
 
-        print("✅ PDF généré avec succès")
+        print("PDF genere avec succes")
         return send_file(output_pdf_path, as_attachment=True)
 
     except Exception as e:
-        print("❌ Erreur Apryse :", str(e))
+        print("Erreur Apryse:", str(e))
         return jsonify({"success": False, "error": f"Erreur Apryse : {str(e)}"}), 500
 
 # ✅ Route alias pour éviter les 404 sur /generate-pdf
@@ -290,7 +432,7 @@ def generate_pdf_alias():
 @app.route("/documents", methods=["GET"])
 def list_documents():
     try:
-        docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1})
+        docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1, "structured_data": 1})
         docs_list = []
         for doc in docs:
             doc['uploaded_at'] = doc['uploaded_at'].isoformat() if 'uploaded_at' in doc else None
