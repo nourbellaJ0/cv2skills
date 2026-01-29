@@ -119,6 +119,15 @@ def sanitize_json(data):
                             obj[k] = [{"item": m} if isinstance(m, str) else m for m in missions]
                         else:
                             obj[k] = [{"item": "Aucune mission"}]
+                    elif k == "livrables":
+                        # S'assurer que livrables est toujours un tableau
+                        livrables = item.get(k, [])
+                        if isinstance(livrables, str):
+                            obj[k] = [{"item": livrables}]
+                        elif isinstance(livrables, list):
+                            obj[k] = [{"item": l} if isinstance(l, str) else l for l in livrables]
+                        else:
+                            obj[k] = [{"item": "Aucun livrable"}]
                     elif k == "contenu":
                         # Normaliser le contenu
                         obj[k] = normalize_contenu(item.get(k, ""))
@@ -432,9 +441,11 @@ def generate_pdf_alias():
 @app.route("/documents", methods=["GET"])
 def list_documents():
     try:
-        docs = collection.find({}, {"_id": 0, "filename": 1, "uploaded_at": 1, "structured_data": 1})
+        docs = collection.find({})
         docs_list = []
         for doc in docs:
+            # Convert ObjectId to string for JSON serialization
+            doc['_id'] = str(doc['_id']) if '_id' in doc else None
             doc['uploaded_at'] = doc['uploaded_at'].isoformat() if 'uploaded_at' in doc else None
             docs_list.append(doc)
         return jsonify(docs_list)
@@ -461,6 +472,74 @@ def add_to_db():
     except Exception as e:
         import traceback
         print(traceback.format_exc())  # Log the full traceback for debugging
+        return jsonify({"success": False, "error": f"Erreur serveur : {str(e)}"}), 500
+
+@app.route("/update-document", methods=["POST"])
+def update_document():
+    try:
+        from bson.objectid import ObjectId
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            return jsonify({"success": False, "error": "Aucune donnée reçue."}), 400
+        
+        doc_id = data.get("_id")
+        filename = data.get("filename")
+        structured_data = data.get("structured_data")
+        
+        if not doc_id or not filename:
+            return jsonify({"success": False, "error": "ID et filename requis."}), 400
+        
+        try:
+            obj_id = ObjectId(doc_id)
+        except:
+            return jsonify({"success": False, "error": "ID invalide."}), 400
+        
+        update_data = {
+            "filename": filename,
+            "structured_data": structured_data if structured_data else {},
+            "updated_at": datetime.datetime.utcnow()
+        }
+        
+        result = collection.update_one(
+            {"_id": obj_id},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            return jsonify({"success": False, "error": "Document non trouvé."}), 404
+        
+        return jsonify({"success": True, "message": "Document mis à jour avec succès."})
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        return jsonify({"success": False, "error": f"Erreur serveur : {str(e)}"}), 500
+
+@app.route("/delete-document", methods=["POST"])
+def delete_document():
+    try:
+        from bson.objectid import ObjectId
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            return jsonify({"success": False, "error": "Aucune donnée reçue."}), 400
+        
+        doc_id = data.get("_id")
+        if not doc_id:
+            return jsonify({"success": False, "error": "ID requis."}), 400
+        
+        try:
+            obj_id = ObjectId(doc_id)
+        except:
+            return jsonify({"success": False, "error": "ID invalide."}), 400
+        
+        result = collection.delete_one({"_id": obj_id})
+        
+        if result.deleted_count == 0:
+            return jsonify({"success": False, "error": "Document non trouvé."}), 404
+        
+        return jsonify({"success": True, "message": "Document supprimé avec succès."})
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         return jsonify({"success": False, "error": f"Erreur serveur : {str(e)}"}), 500
 
 if __name__ == "__main__":

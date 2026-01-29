@@ -650,6 +650,152 @@ body.dark .db-card-title {
 body.dark .db-card-date {
   color: #bbb;
 }
+/* DB CRUD Styles */
+.db-download-btn {
+  width: 100%;
+  background: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  margin-top: 14px;
+  margin-bottom: 12px;
+}
+.db-download-btn:hover {
+  background: #c62828;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(230,57,70,0.2);
+}
+.db-card-action-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.db-edit-btn, .db-delete-btn {
+  flex: 1;
+  background: #457b9d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.92em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.db-edit-btn:hover {
+  background: #2c4a6f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(69,123,157,0.2);
+}
+.db-delete-btn {
+  background: #d32f2f;
+}
+.db-delete-btn:hover {
+  background: #b71c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(211,47,47,0.2);
+}
+.db-card-edit {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.db-edit-filename {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100% !important;
+}
+.db-edit-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.db-save-btn, .db-cancel-btn {
+  flex: 1;
+  background: #43aa8b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.db-save-btn:hover {
+  background: #359374;
+}
+.db-cancel-btn {
+  background: #888;
+}
+.db-cancel-btn:hover {
+  background: #666;
+}
+/* Dark mode adjustments for CRUD */
+body.dark .db-edit-btn {
+  background: #7aa8c8;
+}
+body.dark .db-edit-btn:hover {
+  background: #5a88a8;
+  box-shadow: 0 2px 6px rgba(122,168,200,0.3);
+}
+body.dark .db-delete-btn {
+  background: #ff6b6b;
+}
+body.dark .db-delete-btn:hover {
+  background: #ff5252;
+  box-shadow: 0 2px 6px rgba(255,107,107,0.3);
+}
+body.dark .db-download-btn {
+  background: #ff6b6b;
+}
+body.dark .db-download-btn:hover {
+  background: #ff5252;
+  box-shadow: 0 2px 6px rgba(255,107,107,0.3);
+}
+body.dark .db-save-btn {
+  background: #66bb6a;
+}
+body.dark .db-save-btn:hover {
+  background: #4caf50;
+}
+body.dark .db-cancel-btn {
+  background: #999;
+}
+body.dark .db-cancel-btn:hover {
+  background: #777;
+}
+/* Refresh Button Style */
+.db-refresh-btn {
+  margin-top: 18px;
+  background: #457b9d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.db-refresh-btn:hover {
+  background: #2c4a6f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(69,123,157,0.2);
+}
+body.dark .db-refresh-btn {
+  background: #7aa8c8;
+}
+body.dark .db-refresh-btn:hover {
+  background: #5a88a8;
+  box-shadow: 0 2px 6px rgba(122,168,200,0.3);
+}
   </style>
 </head>
 <body>
@@ -743,7 +889,7 @@ body.dark .db-card-date {
     <div class="container">
       <h2 style="color:#e63946;margin-bottom:18px;">Documents en base</h2>
       <div id="dbList" style="text-align:left;"></div>
-      <button onclick="loadDbList()" style="margin-top:18px;">Rafraîchir</button>
+      <button class="db-refresh-btn" onclick="loadDbList()">Rafraîchir</button>
     </div>
   </div>
 
@@ -781,28 +927,45 @@ function loadDbList() {
         const date = doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleString() : '';
         const jsonData = JSON.stringify(doc.structured_data || {});
         return `
-          <div class="db-card">
-            <div class="db-card-title">${displayName}</div>
-            <div class="db-card-date">${date}</div>
-            <button class="db-download-btn" data-json='${encodeURIComponent(jsonData)}'>
-              Télécharger PDF
-            </button>
+          <div class="db-card" data-id="${doc._id}">
+            <div class="db-card-view">
+              <div class="db-card-title">${displayName}</div>
+              <div class="db-card-date">${date}</div>
+              <button class="db-download-btn" data-json='${encodeURIComponent(jsonData)}'>
+                Télécharger PDF
+              </button>
+              <div class="db-card-action-buttons">
+                <button class="db-edit-btn" data-id="${doc._id}">Modifier</button>
+                <button class="db-delete-btn" data-id="${doc._id}">Supprimer</button>
+              </div>
+            </div>
+            <div class="db-card-edit" style="display:none;">
+              <input type="text" class="input db-edit-filename" value="${doc.filename}" placeholder="Nom du fichier" />
+              <div class="db-edit-actions">
+                <button class="db-save-btn" data-id="${doc._id}">Enregistrer</button>
+                <button class="db-cancel-btn" data-id="${doc._id}">Annuler</button>
+              </div>
+            </div>
           </div>
         `;
       }).join('') + '</div>';
-      // Ajout des listeners pour les boutons Télécharger
+      
+      // Event listeners for download buttons
       document.querySelectorAll('.db-download-btn').forEach(btn => {
-        btn.addEventListener('click', async function() {
+        btn.addEventListener('click', async function(e) {
+          e.preventDefault();
           const jsonData = decodeURIComponent(this.getAttribute('data-json'));
           const formData = new FormData();
           formData.append('jsonData', jsonData);
+          
           try {
             const response = await fetch('/generate-pdf-apryse-template', {
               method: 'POST',
               body: formData
             });
             if (!response.ok) {
-              alert('Erreur lors de la génération du PDF.');
+              const errorData = await response.json().catch(() => ({}));
+              alert('Erreur lors de la génération du PDF: ' + (errorData.error || 'Erreur serveur'));
               return;
             }
             const blob = await response.blob();
@@ -815,7 +978,95 @@ function loadDbList() {
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
           } catch (e) {
-            alert('Erreur lors de la génération du PDF.');
+            alert('Erreur lors de la génération du PDF: ' + e.message);
+            console.error('Download error:', e);
+          }
+        });
+      });
+      
+      // Event listeners for edit buttons
+      document.querySelectorAll('.db-edit-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.db-card');
+          card.querySelector('.db-card-view').style.display = 'none';
+          card.querySelector('.db-card-edit').style.display = 'block';
+        });
+      });
+      
+      // Event listeners for cancel buttons
+      document.querySelectorAll('.db-cancel-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.db-card');
+          card.querySelector('.db-card-view').style.display = 'block';
+          card.querySelector('.db-card-edit').style.display = 'none';
+        });
+      });
+      
+      // Event listeners for save buttons
+      document.querySelectorAll('.db-save-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const card = this.closest('.db-card');
+          const docId = this.getAttribute('data-id');
+          const newFilename = card.querySelector('.db-edit-filename').value.trim();
+          
+          if (!newFilename) {
+            alert('Le nom du fichier ne peut pas être vide.');
+            return;
+          }
+          
+          try {
+            const response = await fetch('/update-document', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                _id: docId,
+                filename: newFilename,
+                structured_data: {} // Keep existing data
+              })
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+              alert('Document mis à jour avec succès.');
+              loadDbList();
+            } else {
+              alert('Erreur: ' + result.error);
+            }
+          } catch (e) {
+            alert('Erreur lors de la mise à jour.');
+            console.error(e);
+          }
+        });
+      });
+      
+      // Event listeners for delete buttons
+      document.querySelectorAll('.db-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const docId = this.getAttribute('data-id');
+          const card = this.closest('.db-card');
+          const filename = card.querySelector('.db-card-title').textContent;
+          
+          if (!confirm(`Êtes-vous sûr de vouloir supprimer le document "${filename}" ?`)) {
+            return;
+          }
+          
+          try {
+            const response = await fetch('/delete-document', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ _id: docId })
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+              alert('Document supprimé avec succès.');
+              loadDbList();
+            } else {
+              alert('Erreur: ' + result.error);
+            }
+          } catch (e) {
+            alert('Erreur lors de la suppression.');
+            console.error(e);
           }
         });
       });
