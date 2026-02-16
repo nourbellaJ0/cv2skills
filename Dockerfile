@@ -8,10 +8,8 @@ RUN apt-get update && apt-get install -y \
 
 COPY . /app
 
-# Mettre à jour pip
 RUN pip install --upgrade pip
 
-# ✅ Installer toutes les dépendances avec accès au dépôt Apryse
 RUN pip install --no-cache-dir --extra-index-url=https://pypi.apryse.com -r requirements.txt
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
